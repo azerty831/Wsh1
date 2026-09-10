@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mahrec-cache-v2';
+const CACHE_NAME = 'mahrec-cache-v3';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -19,9 +19,11 @@ self.addEventListener('activate', (event) => {
 
 // Réseau en priorité pour les pages/fichiers de l'app (toujours la version la plus récente si internet
 // est disponible), avec le cache seulement en secours si hors-ligne.
+// cache: 'no-store' force une vraie requête réseau à chaque fois, sans passer par le cache HTTP du
+// navigateur (sinon on pouvait recevoir une copie périmée même en étant "en ligne").
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    fetch(event.request).then((response) => {
+    fetch(event.request, { cache: 'no-store' }).then((response) => {
       const copy = response.clone();
       caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
       return response;
