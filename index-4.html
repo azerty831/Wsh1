@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahreç — points d'articulation</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#1D4A35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mahreç">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Amiri:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF6EC; --paper-2:#F2EBD9; --ink:#20291F; --ink-soft:#5B6459;
+    --emerald:#2E6B4E; --emerald-deep:#1D4A35; --gold:#B0812B; --gold-soft:#E4CB93;
+    --line:#DCD2B4; --risk:#9C4A32; --risk-soft:#F3E1D8; --card:#FFFFFF;
+  }
+  body.dark{
+    --paper:#1B211C; --paper-2:#222A22; --ink:#EDE8D8; --ink-soft:#A9B0A2;
+    --emerald:#4C9970; --emerald-deep:#8BD1A6; --gold:#D9AA4E; --gold-soft:#6B5A30;
+    --line:#39412F; --risk:#D98B6E; --risk-soft:#3A2A22; --card:#232B24;
+  }
+  body{transition:background .2s ease, color .2s ease;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Source Sans 3', sans-serif;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 20px 90px;}
+
+  header{display:flex;gap:28px;align-items:center;margin-bottom:8px;}
+  .hero-text{flex:1;min-width:220px;}
+  .kicker-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;}
+  .kicker{font-size:14px;color:var(--gold);letter-spacing:.02em;}
+  .lang-switch{display:flex;border:1px solid var(--line);border-radius:20px;overflow:hidden;flex-shrink:0;}
+  .lang-btn{
+    font-family:'Source Sans 3', sans-serif;font-size:13px;font-weight:600;padding:6px 14px;
+    background:var(--card);color:var(--ink-soft);border:none;cursor:pointer;
+  }
+  .lang-btn.active{background:var(--emerald);color:#fff;}
+  .dark-toggle{
+    width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--card);
+    cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  h1{font-family:'Fraunces', serif;font-size:clamp(32px,6vw,48px);font-weight:500;margin:0 0 10px;line-height:1.05;}
+  .sub{color:var(--ink-soft);font-size:15.5px;max-width:52ch;line-height:1.55;}
+  .diagram-hero{width:150px;height:150px;flex-shrink:0;}
+
+  .app-nav{
+    display:flex;gap:8px;overflow-x:auto;margin-top:26px;padding-bottom:10px;
+    border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .app-nav::-webkit-scrollbar{display:none;}
+  .app-nav button{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:9px 16px;
+    border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    cursor:pointer;white-space:nowrap;flex-shrink:0;
+  }
+  .app-nav button.active{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+
+  .page{display:none;}
+  .page.active{display:block;}
+
+  .progress-block{
+    margin-top:30px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:16px 0;display:flex;align-items:center;gap:16px;
+  }
+  .progress-track{flex:1;height:8px;background:var(--paper-2);border-radius:5px;overflow:hidden;border:1px solid var(--line);}
+  .progress-fill{height:100%;background:var(--emerald);width:0%;transition:width .4s ease;}
+  .progress-label{font-size:14px;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+  .ref-links{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;font-size:13px;color:var(--ink-soft);}
+  .ref-links a{color:var(--emerald-deep);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);}
+  .ref-links a:hover{border-bottom-color:var(--emerald);}
+
+  section.zone{margin-top:46px;}
+  .zone-head{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:10px;}
+  .zone-head h2{font-family:'Fraunces', serif;font-weight:500;font-size:22px;margin:0;}
+  .zone-head .zone-ar{font-family:'Amiri', serif;color:var(--gold);font-size:22px;}
+  .zone-count{margin-left:auto;font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+
+  .letters{display:flex;flex-direction:column;gap:10px;}
+  .letter-card{border:1px solid var(--line);background:var(--card);border-radius:10px;overflow:hidden;}
+  .letter-row{display:flex;align-items:center;gap:16px;padding:12px 16px;cursor:pointer;user-select:none;}
+  .letter-ar-badge{font-family:'Amiri', serif;font-size:34px;line-height:1;width:48px;text-align:center;flex-shrink:0;color:var(--ink);}
+  .letter-card.done .letter-ar-badge{color:var(--emerald-deep);}
+  .letter-main{flex:1;min-width:0;}
+  .letter-name{font-size:14.5px;font-weight:600;}
+  .letter-desc{font-size:12.5px;color:var(--ink-soft);line-height:1.35;}
+  .check{
+    width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;background:var(--card);
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .letter-card.done .check{background:var(--gold);border-color:var(--gold);}
+  .letter-card.done .letter-name{color:var(--emerald-deep);}
+  .caret{color:var(--ink-soft);font-size:12px;transition:transform .2s ease;flex-shrink:0;width:14px;text-align:center;}
+  .letter-card.open .caret{transform:rotate(90deg);}
+
+  .letter-detail{max-height:0;overflow:hidden;transition:max-height .3s ease;background:var(--paper-2);}
+  .letter-card.open .letter-detail{max-height:640px;border-top:1px solid var(--line);}
+  .letter-detail-inner{padding:20px 18px 22px;display:grid;grid-template-columns:150px 1fr;gap:20px;}
+  .detail-visual{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .detail-visual svg{width:140px;height:140px;}
+  .detail-big-ar{font-family:'Amiri', serif;font-size:48px;line-height:1;color:var(--emerald-deep);}
+  .detail-zone-tag{font-size:11px;color:var(--ink-soft);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px 10px;text-align:center;}
+  .detail-img-link{font-size:12px;color:var(--emerald-deep);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);text-align:center;}
+  .detail-img-link:hover{border-bottom-color:var(--emerald);}
+
+  .detail-block{margin-bottom:12px;}
+  .detail-block:last-child{margin-bottom:0;}
+  .detail-block-label{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--gold);font-weight:600;margin-bottom:3px;}
+  .detail-block-text{font-size:13.5px;line-height:1.55;color:var(--ink);}
+  .detail-block-text a{color:var(--emerald-deep);font-weight:600;}
+
+  .letter-note-label{font-size:12px;color:var(--ink-soft);margin-bottom:4px;display:block;margin-top:14px;}
+  .letter-note{
+    width:100%;resize:vertical;min-height:44px;font-family:inherit;font-size:13.5px;
+    padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);
+  }
+  .letter-note:focus{outline:none;border-color:var(--emerald);}
+
+  @media (max-width:560px){
+    .letter-detail-inner{grid-template-columns:1fr;}
+    .detail-visual{flex-direction:row;justify-content:center;}
+    header{flex-direction:column;align-items:flex-start;}
+    .diagram-hero{order:-1;}
+  }
+
+  .tip{font-size:13.5px;color:var(--ink-soft);margin-top:14px;padding-left:14px;border-left:2px solid var(--gold);line-height:1.5;}
+
+  .risk-section{margin-top:56px;}
+  .risk-section h2{font-family:'Fraunces', serif;font-weight:500;font-size:24px;margin:0 0 4px;}
+  .risk-grid{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+  .risk-item{background:var(--risk-soft);border:1px solid #E3C3B2;border-radius:8px;padding:14px 16px;}
+  .risk-pair{font-family:'Amiri', serif;font-size:24px;color:var(--risk);margin-bottom:4px;}
+  .risk-desc{font-size:13.5px;color:var(--ink);line-height:1.5;}
+  .risk-imgs{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+  .risk-imgs a{font-size:12px;font-weight:600;color:var(--emerald-deep);text-decoration:none;border-bottom:1px solid var(--gold-soft);}
+
+  .quiz-section, .sifat-section, .journal-section{margin-top:56px;}
+  .quiz-section h2, .sifat-section h2, .journal-section h2{font-family:'Fraunces', serif;font-weight:500;font-size:24px;margin:0 0 4px;}
+  .quiz-box{
+    margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:28px 20px;text-align:center;
+  }
+  .quiz-diff{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+  .quiz-diff button{
+    font-family:'Source Sans 3', sans-serif;font-size:13px;font-weight:600;padding:7px 15px;
+    border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);cursor:pointer;
+  }
+  .quiz-diff button.active.easy{background:#4C9970;border-color:#4C9970;color:#fff;}
+  .quiz-diff button.active.medium{background:var(--gold);border-color:var(--gold);color:#fff;}
+  .quiz-diff button.active.hard{background:var(--risk);border-color:var(--risk);color:#fff;}
+  .quiz-score{margin-top:10px;font-size:12.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+  .quiz-ar{font-family:'Amiri', serif;font-size:64px;color:var(--ink);margin-bottom:14px;}
+  .quiz-display-text{font-family:'Fraunces', serif;font-size:19px;color:var(--emerald-deep);margin-bottom:14px;line-height:1.4;}
+  .quiz-prompt{font-size:14px;color:var(--ink-soft);margin-bottom:14px;line-height:1.5;}
+  .quiz-options{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;}
+  .quiz-opt{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:11px 16px;
+    border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;
+    text-align:left;line-height:1.4;
+  }
+  .quiz-opt.correct{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+  .quiz-opt.wrong{background:var(--risk);border-color:var(--risk);color:#fff;}
+  .quiz-feedback{font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-top:10px;max-width:52ch;margin-left:auto;margin-right:auto;}
+  .quiz-next{
+    margin-top:16px;font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;
+    padding:8px 18px;border-radius:20px;border:1px solid var(--emerald);background:transparent;color:var(--emerald-deep);cursor:pointer;
+  }
+
+  .quiz-modes{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+
+  .flash-progress{font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;font-variant-numeric:tabular-nums;}
+  .flash-card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    min-height:180px;display:flex;align-items:center;justify-content:center;
+    padding:26px 20px;text-align:center;cursor:pointer;
+  }
+  .flash-front{font-family:'Amiri', serif;font-size:56px;color:var(--ink);}
+  .flash-back{display:none;font-size:14.5px;line-height:1.6;color:var(--ink);}
+  .flash-card.revealed .flash-front{display:none;}
+  .flash-card.revealed .flash-back{display:block;}
+  .flash-actions{display:flex;gap:10px;justify-content:center;margin-top:16px;}
+  .flash-btn{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:10px 20px;
+    border-radius:20px;border:none;cursor:pointer;
+  }
+  .flash-btn.reveal{background:var(--emerald);color:#fff;}
+  .flash-btn.know{background:var(--emerald);color:#fff;}
+  .flash-btn.review{background:var(--risk);color:#fff;}
+
+  .tf-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 20px;text-align:center;}
+  .tf-statement{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:18px;}
+  .tf-options{display:flex;gap:10px;justify-content:center;margin-bottom:12px;}
+  .tf-opt{
+    font-family:'Source Sans 3', sans-serif;font-size:14px;font-weight:700;padding:10px 26px;
+    border-radius:20px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;
+  }
+  .tf-opt.correct{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+  .tf-opt.wrong{background:var(--risk);border-color:var(--risk);color:#fff;}
+
+  .match-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .match-card{
+    aspect-ratio:1;border-radius:10px;border:1px solid var(--line);background:var(--card);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    font-family:'Amiri', serif;font-size:22px;color:var(--ink);padding:6px;text-align:center;line-height:1.2;
+  }
+  .match-card.selected{border-color:var(--emerald);background:var(--paper-2);}
+  .match-card.matched{background:var(--emerald);border-color:var(--emerald);color:#fff;opacity:0.6;}
+  @media (max-width:480px){ .match-grid{grid-template-columns:repeat(3,1fr);} }
+
+  .sifat-grid{display:flex;flex-direction:column;gap:10px;margin-top:18px;}
+  .sifat-item{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;}
+  .sifat-name{font-family:'Fraunces', serif;font-size:16px;color:var(--emerald-deep);margin-bottom:4px;}
+  .sifat-desc{font-size:13.5px;color:var(--ink);line-height:1.5;}
+
+  .rules-section{margin-top:56px;}
+  .rules-section h2{font-family:'Fraunces', serif;font-weight:500;font-size:24px;margin:0 0 4px;}
+  .rule-category{margin-top:26px;}
+  .rule-category-title{
+    font-family:'Fraunces', serif;font-size:17px;color:var(--gold);margin-bottom:10px;
+    padding-bottom:6px;border-bottom:1px solid var(--line);
+  }
+  .rule-grid{display:flex;flex-direction:column;gap:8px;}
+  .rule-item{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 15px;}
+  .rule-name{font-size:14px;font-weight:600;color:var(--emerald-deep);margin-bottom:3px;}
+  .rule-desc{font-size:13px;color:var(--ink);line-height:1.5;}
+
+  .journal-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;}
+  .journal-form input[type="date"]{
+    font-family:inherit;font-size:13.5px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;
+    background:var(--card);color:var(--ink);
+  }
+  .journal-form input[type="text"]{
+    flex:1;min-width:180px;font-family:inherit;font-size:13.5px;padding:8px 10px;
+    border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);
+  }
+  .journal-form button{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:8px 18px;
+    border-radius:6px;border:none;background:var(--emerald);color:#fff;cursor:pointer;
+  }
+  .journal-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+  .journal-item{
+    display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:8px;
+    padding:10px 14px;font-size:13.5px;align-items:baseline;
+  }
+  .journal-item .jd{font-weight:600;color:var(--gold);white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .journal-item .jt{color:var(--ink);flex:1;}
+  .journal-empty{font-size:13.5px;color:var(--ink-soft);margin-top:14px;}
+
+  .export-row{margin-top:44px;text-align:center;}
+  .export-row button{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:10px 22px;
+    border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;
+    margin:0 6px 10px;
+  }
+  .export-row .tool-note{margin-top:8px;}
+
+  .resources{margin-top:56px;}
+  .resources h2{font-family:'Fraunces', serif;font-weight:500;font-size:26px;margin:0 0 4px;}
+  .resources .sub{margin-bottom:20px;}
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .tab{
+    font-family:'Source Sans 3', sans-serif;font-size:14px;font-weight:600;padding:8px 16px;
+    border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);cursor:pointer;
+  }
+  .tab.active{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+  .res-group{display:none;flex-direction:column;gap:10px;}
+  .res-group.active{display:flex;}
+  .res-item{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--ink);}
+  .res-item:hover{border-color:var(--emerald);}
+  .res-num{font-family:'Fraunces', serif;color:var(--gold);font-size:15px;flex-shrink:0;width:20px;}
+  .res-title{font-size:15px;font-weight:600;margin-bottom:2px;line-height:1.3;}
+  .res-note{font-size:13px;color:var(--ink-soft);line-height:1.4;}
+
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);}
+
+  .progress-section h2, .tools-section h2{font-family:'Fraunces', serif;font-weight:500;font-size:26px;margin:0 0 4px;}
+
+  .streak-box{
+    margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  }
+  .streak-num{font-family:'Fraunces', serif;font-size:38px;color:var(--gold);line-height:1;}
+  .streak-label{font-size:12.5px;color:var(--ink-soft);}
+  .streak-sep{width:1px;height:34px;background:var(--line);}
+
+  .badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:20px;}
+  .badge-item{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center;
+    opacity:0.4;
+  }
+  .badge-item.unlocked{opacity:1;border-color:var(--gold);}
+  .badge-icon{font-size:26px;margin-bottom:6px;}
+  .badge-name{font-size:12px;font-weight:600;color:var(--ink);line-height:1.3;}
+
+  .graph-box{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 16px;}
+  .graph-title{font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
+
+  .tool-block{margin-top:34px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 20px;}
+  .tool-block h3{font-family:'Fraunces', serif;font-size:18px;font-weight:500;margin:0 0 12px;color:var(--emerald-deep);}
+  .tool-note{font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;line-height:1.5;}
+
+  .metro-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .metro-controls select, .metro-controls button{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:9px 14px;
+    border-radius:8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;
+  }
+  .metro-controls button.start{background:var(--emerald);border-color:var(--emerald);color:#fff;}
+  .metro-display{text-align:center;padding:20px 0;}
+  .metro-pulse{
+    width:80px;height:80px;border-radius:50%;background:var(--paper-2);border:2px solid var(--line);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 12px;
+    font-family:'Fraunces', serif;font-size:30px;color:var(--ink);transition:transform .1s ease, background .1s ease;
+  }
+  .metro-pulse.beat{transform:scale(1.12);background:var(--gold);border-color:var(--gold);color:#fff;}
+  .metro-count-label{font-size:12.5px;color:var(--ink-soft);}
+
+  .rec-controls{display:flex;gap:10px;flex-wrap:wrap;}
+  .rec-controls button{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:10px 18px;
+    border-radius:20px;border:none;cursor:pointer;
+  }
+  .rec-controls button.record{background:var(--risk);color:#fff;}
+  .rec-controls button.stop{background:var(--ink);color:#fff;}
+  #recPlayback{margin-top:14px;}
+  #recPlayback audio{width:100%;}
+  .rec-error{font-size:12.5px;color:var(--risk);margin-top:10px;}
+
+  .tools-section, .stats-section{margin-top:8px;}
+  .tools-section h2, .stats-section h2{font-family:'Fraunces', serif;font-weight:500;font-size:24px;margin:0 0 4px;}
+
+  .metro-box{
+    margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:32px 20px;text-align:center;
+  }
+  .metro-count{font-family:'Fraunces', serif;font-size:56px;color:var(--emerald-deep);margin-bottom:14px;}
+  .metro-dots{display:flex;gap:10px;justify-content:center;margin-bottom:20px;}
+  .metro-dot{width:16px;height:16px;border-radius:50%;background:var(--line);}
+  .metro-dot.active{background:var(--emerald);}
+  .metro-lengths{display:flex;gap:8px;justify-content:center;margin-bottom:20px;}
+  .metro-lengths button{
+    font-family:'Source Sans 3', sans-serif;font-size:13.5px;font-weight:600;padding:8px 18px;
+    border-radius:20px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;
+  }
+  .metro-lengths button.active{background:var(--gold);border-color:var(--gold);color:#fff;}
+  .metro-toggle{
+    font-family:'Source Sans 3', sans-serif;font-size:14.5px;font-weight:700;padding:12px 30px;
+    border-radius:24px;border:none;background:var(--emerald);color:#fff;cursor:pointer;
+  }
+  .metro-toggle.stop{background:var(--risk);}
+
+  .streak-row{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap;}
+  .streak-card{
+    flex:1;min-width:130px;background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:16px;text-align:center;
+  }
+  .streak-num{font-family:'Fraunces', serif;font-size:32px;color:var(--emerald-deep);}
+  .streak-label{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+
+  .chart-box{margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 16px;}
+  .chart-title{font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;}
+  .chart-bars{display:flex;align-items:flex-end;gap:4px;height:110px;}
+  .chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+  .chart-bar{width:100%;background:var(--emerald);border-radius:3px 3px 0 0;min-height:2px;}
+  .chart-day{font-size:9px;color:var(--ink-soft);margin-top:4px;}
+
+  .badges-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:26px;}
+  .badge-item{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 12px;text-align:center;opacity:0.35;
+  }
+  .badge-item.unlocked{opacity:1;border-color:var(--gold);}
+  .badge-emoji{font-size:26px;margin-bottom:6px;}
+  .badge-name{font-size:12px;font-weight:600;color:var(--ink);line-height:1.3;}
+
+  .sources-section{margin-top:44px;}
+
+  .quran-section{margin-top:44px;}
+  .quran-section h2{font-family:'Fraunces', serif;font-weight:500;font-size:26px;margin:0 0 4px;}
+
+  .surah-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:18px;}
+  .surah-item{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:34px 14px 12px;
+    cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:4px;
+  }
+  .surah-item{position:relative;}
+  .surah-item:hover{border-color:var(--emerald);}
+  .surah-num{font-size:11px;color:var(--gold);font-weight:600;}
+  .surah-ar{font-family:'Amiri', serif;font-size:20px;color:var(--ink);}
+  .surah-en{font-size:11.5px;color:var(--ink-soft);}
+  .surah-offline-badge{
+    position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;
+    background:var(--emerald);color:#fff;font-size:11px;line-height:18px;text-align:center;
+  }
+  .surah-fav-btn{
+    position:absolute;top:6px;left:6px;width:26px;height:26px;border:none;background:transparent;
+    font-size:18px;cursor:pointer;line-height:26px;text-align:center;color:var(--gold);opacity:0.75;
+  }
+  .surah-fav-btn.is-fav{opacity:1;}
+  .quran-toolbar{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+  .quran-search-input{
+    flex:1;min-width:180px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;
+    font-size:14px;background:var(--card);color:var(--ink);
+  }
+  .quran-fav-toggle{
+    padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card);
+    color:var(--ink);font-size:13px;cursor:pointer;white-space:nowrap;
+  }
+  .quran-fav-toggle.active{background:var(--emerald);color:#fff;border-color:var(--emerald);}
+  .surah-status-btn{
+    position:absolute;bottom:8px;right:8px;font-size:15px;border:none;background:transparent;
+    cursor:pointer;color:var(--emerald);line-height:1;padding:2px;
+  }
+  .quran-resume-banner{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:var(--card);border:1px solid var(--gold);border-radius:10px;padding:10px 14px;
+    margin-top:14px;font-size:13.5px;
+  }
+  .quran-resume-banner button{
+    background:var(--emerald);color:#fff;border:none;border-radius:8px;padding:8px 14px;
+    font-size:13px;cursor:pointer;white-space:nowrap;
+  }
+  .quran-text-search-toggle{
+    background:none;border:none;color:var(--emerald-deep);font-size:13px;cursor:pointer;
+    margin-top:10px;text-decoration:underline;padding:0;
+  }
+  .quran-text-search-box{margin-top:10px;}
+  .quran-text-search-box input{
+    width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:10px;
+    font-size:14px;background:var(--card);color:var(--ink);box-sizing:border-box;
+  }
+  .quran-text-search-note{font-size:11.5px;color:var(--ink-soft);margin:6px 0 0;}
+  .quran-text-search-results{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+  .quran-text-search-result{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    cursor:pointer;text-align:left;
+  }
+  .quran-text-search-result .qtsr-title{font-size:12px;color:var(--gold);font-weight:600;}
+  .quran-text-search-result .qtsr-ar{font-family:'Amiri', serif;font-size:18px;color:var(--ink);margin-top:4px;}
+  .quran-font-controls{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:10px;}
+  .quran-font-controls button{
+    border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 12px;
+    font-size:14px;cursor:pointer;color:var(--ink);
+  }
+  .quran-note-box{margin-top:20px;}
+  .quran-note-box label{font-size:12.5px;color:var(--ink-soft);display:block;margin-bottom:6px;}
+  .quran-note-box textarea{
+    width:100%;min-height:80px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+    font-size:14px;background:var(--card);color:var(--ink);box-sizing:border-box;font-family:inherit;
+  }
+  .quran-note-saved{font-size:11.5px;color:var(--emerald);margin-top:4px;opacity:0;transition:opacity .3s;}
+  .quran-note-saved.show{opacity:1;}
+  .quran-rev-count{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+
+  .surah-header{margin-top:18px;text-align:center;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:10px;}
+  .surah-header-ar{font-family:'Amiri', serif;font-size:32px;color:var(--emerald-deep);}
+  .surah-header-en{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+
+  .surah-toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);margin:14px 0;}
+
+  .ayah-list{display:flex;flex-direction:column;gap:10px;}
+  .ayah-item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .ayah-num{
+    display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;
+    border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:600;margin-bottom:8px;
+  }
+  .ayah-ar{font-family:'Amiri', serif;font-size:24px;line-height:2;color:var(--ink);text-align:right;direction:rtl;}
+  .ayah-tr{font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:8px;}
+  .sources-section h2{font-family:'Fraunces', serif;font-weight:500;font-size:18px;margin:0 0 4px;}
+  .sources-list{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:6px;}
+  .sources-list a{font-size:13px;color:var(--emerald-deep);text-decoration:none;border-bottom:1px solid var(--gold-soft);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="hero-text">
+      <div class="kicker-row">
+        <span class="kicker" id="kicker"></span>
+        <div class="lang-switch">
+          <button class="lang-btn active" data-lang="fr">FR</button>
+          <button class="lang-btn" data-lang="tr">TR</button>
+        </div>
+        <button class="dark-toggle" id="darkToggle" title="Mode sombre">🌙</button>
+      </div>
+      <h1 id="mainTitle"></h1>
+      <p class="sub" id="mainSub"></p>
+    </div>
+    <svg class="diagram-hero" viewBox="0 0 220 200">
+      <path d="M35,150 C20,135 15,95 30,65 C45,35 75,20 115,22 C155,24 185,45 195,75 C200,95 195,115 182,128 L178,150 C176,160 168,164 158,160 L152,172 C150,180 140,183 132,178 L112,180 C85,182 55,172 35,150 Z"
+        fill="none" stroke="#20291F" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M175,60 C155,65 130,80 110,95 C95,107 78,110 65,105" fill="none" stroke="#2E6B4E" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    </svg>
+  </header>
+
+  <nav class="app-nav" id="appNav"></nav>
+
+  <div class="page" data-page="letters">
+  <div class="progress-block">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel"></div>
+  </div>
+
+  <div class="ref-links">
+    <span id="refLabel"></span>
+    <a id="refLink1" href="https://imamfaisal.com/articulation/" target="_blank" rel="noopener"></a>
+    <a id="refLink2" href="https://equrancoaching.com/tajweed-guide/makharij/chart" target="_blank" rel="noopener"></a>
+  </div>
+
+  <section class="zone" data-zone="gorge">
+    <div class="zone-head"><h2 id="head-gorge"></h2><span class="zone-ar">حلق</span><span class="zone-count" id="count-gorge"></span></div>
+    <div class="letters" id="zone-gorge"></div>
+    <p class="tip" id="tip-gorge"></p>
+  </section>
+
+  <section class="zone" data-zone="langue">
+    <div class="zone-head"><h2 id="head-langue"></h2><span class="zone-ar">لسان</span><span class="zone-count" id="count-langue"></span></div>
+    <div class="letters" id="zone-langue"></div>
+    <p class="tip" id="tip-langue"></p>
+  </section>
+
+  <section class="zone" data-zone="levres">
+    <div class="zone-head"><h2 id="head-levres"></h2><span class="zone-ar">شفتان</span><span class="zone-count" id="count-levres"></span></div>
+    <div class="letters" id="zone-levres"></div>
+  </section>
+  </div>
+
+  <div class="page" data-page="quiz">
+  <section class="quiz-section">
+    <h2 id="quizTitle"></h2>
+    <p class="sub" id="quizSub"></p>
+    <div class="quiz-modes" id="quizModes"></div>
+    <div id="quizModeContent"></div>
+  </section>
+  </div>
+
+  <div class="page" data-page="risk">
+  <section class="risk-section">
+    <h2 id="riskTitle"></h2>
+    <p class="sub" id="riskSub"></p>
+    <div class="risk-grid" id="riskGrid"></div>
+  </section>
+  </div>
+
+  <div class="page" data-page="sifat">
+  <section class="sifat-section">
+    <h2 id="sifatTitle"></h2>
+    <p class="sub" id="sifatSub"></p>
+    <div class="sifat-grid" id="sifatGrid"></div>
+  </section>
+  </div>
+
+  <div class="page" data-page="rules">
+  <section class="rules-section">
+    <h2 id="rulesTitle"></h2>
+    <p class="sub" id="rulesSub"></p>
+    <div id="rulesContainer"></div>
+  </section>
+  </div>
+
+  <div class="page" data-page="tools">
+  <section class="tools-section">
+    <h2 id="toolsTitle"></h2>
+    <p class="sub" id="toolsSub"></p>
+    <div class="metro-box">
+      <div class="metro-count" id="metroCount">1</div>
+      <div class="metro-dots" id="metroDots"></div>
+      <div class="metro-lengths" id="metroLengths"></div>
+      <button class="metro-toggle" id="metroToggle"></button>
+    </div>
+
+    <div class="tool-block">
+      <h3 id="recTitle"></h3>
+      <p class="tool-note" id="recNote"></p>
+      <div class="rec-controls" id="recControls"></div>
+      <div id="recPlayback"></div>
+    </div>
+  </section>
+  </div>
+
+  <div class="page" data-page="stats">
+  <section class="stats-section">
+    <h2 id="statsTitle"></h2>
+    <p class="sub" id="statsSub"></p>
+    <div class="streak-row" id="streakRow"></div>
+    <div class="chart-box" id="chartBox"></div>
+    <div class="badges-grid" id="badgesGrid"></div>
+  </section>
+  </div>
+
+  <div class="page" data-page="journal">
+  <section class="journal-section">
+    <h2 id="journalTitle"></h2>
+    <p class="sub" id="journalSub"></p>
+    <div class="journal-form">
+      <input type="date" id="journalDate">
+      <input type="text" id="journalInput">
+      <button id="journalAddBtn"></button>
+    </div>
+    <div class="journal-list" id="journalList"></div>
+  </section>
+
+  <div class="export-row">
+    <button id="exportBtn"></button>
+    <button id="importBtn"></button>
+    <input type="file" id="importFileInput" accept="application/json" style="display:none;">
+    <p class="tool-note" id="importStatus" style="display:none;"></p>
+  </div>
+  </div>
+
+  <div class="page" data-page="quran">
+  <section class="quran-section">
+    <h2 id="quranTitle"></h2>
+    <p class="sub" id="quranSub"></p>
+    <div id="quranContent"></div>
+  </section>
+  </div>
+
+  <div class="page" data-page="sources">
+  <section class="sources-section">
+    <h2 id="sourcesTitle"></h2>
+    <p class="sub" id="sourcesSub"></p>
+    <ul class="sources-list">
+      <li><a href="https://tecvid.org/2-ders-mahrecler-harflerin-cikis-yerleri/" target="_blank" rel="noopener">tecvid.org — Mahreçler (Harflerin Çıkış Yerleri)</a></li>
+      <li><a href="https://imamfaisal.com/articulation/" target="_blank" rel="noopener">imamfaisal.com — Articulation Points chart</a></li>
+      <li><a href="https://equrancoaching.com/tajweed-guide/makharij/chart" target="_blank" rel="noopener">equrancoaching.com — Tajweed Makharij chart</a></li>
+    </ul>
+  </section>
+  </div>
+
+  <div class="page" data-page="resources">
+  <section class="resources">
+    <h2 id="resTitle"></h2>
+    <p class="sub" id="resSub"></p>
+    <div class="tabs">
+      <button class="tab active" data-tab="fr">Français</button>
+      <button class="tab" data-tab="tr">Türkçe</button>
+      <button class="tab" data-tab="autre">Théorie & apps</button>
+    </div>
+    <div class="res-group active" id="res-fr"></div>
+    <div class="res-group" id="res-tr"></div>
+    <div class="res-group" id="res-autre"></div>
+  </section>
+  </div>
+
+  <footer id="footerText"></footer>
+</div>
+
+<script>
+// Si l'app n'est pas ouverte dans Claude (donc window.storage n'existe pas),
+// on utilise le stockage du navigateur (localStorage) à la place, de façon transparente.
+if(!window.storage){
+  window.storage = {
+    async get(key){
+      const v = localStorage.getItem(key);
+      return v === null ? null : { key, value: v, shared:false };
+    },
+    async set(key, value){
+      localStorage.setItem(key, value);
+      return { key, value, shared:false };
+    },
+    async delete(key){
+      localStorage.removeItem(key);
+      return { key, deleted:true, shared:false };
+    },
+    async list(prefix){
+      const keys = Object.keys(localStorage).filter(k => !prefix || k.startsWith(prefix));
+      return { keys, shared:false };
+    }
+  };
+}
+
+const UI = {
+  fr: {
+    kicker:"Tajwid — makharij al-huruf",
+    title:"Les points d'articulation",
+    sub:"Ouvre chaque lettre pour voir sur le schéma exactement où la langue ou la gorge doit se placer, avec un guide pas à pas. Coche-la une fois maîtrisée — tout se sauvegarde automatiquement.",
+    progress:(d,t)=>`${d} / ${t} lettres`,
+    refLabel:"Voir les 17 points sur une figure complète :",
+    refLink1:"Diagramme complet — imamfaisal.com ↗",
+    refLink2:"Fiche imprimable — equrancoaching.com ↗",
+    zoneGorge:"La gorge", zoneLangue:"La langue", zoneLevres:"Les lèvres",
+    tipGorge:"Pose une main sur la gorge en prononçant. Pour ح et ع tu dois sentir la même zone se resserrer — seule la vibration (la voix) change entre les deux.",
+    tipLangue:"Le ض est réputée la lettre la plus difficile — d'où son surnom de « lettre du Coran ». Prends le temps qu'il faut, sans brûler les étapes.",
+    blockPlace:"Comment placer", blockCompare:"Son proche", blockMistake:"Piège fréquent",
+    noteLabel:"Ta note perso", notePlaceholder:"ex : bien réussi mardi, encore hésitant en fin de phrase…",
+    imgLink:"Voir une image de ce point ↗",
+    riskTitle:"Les paires à risque",
+    riskSub:"Les confusions les plus fréquentes chez les débutants — à vérifier en priorité avec l'imam.",
+    resTitle:"Ressources vidéo", resSub:"Une lettre à la fois : regarder, s'enregistrer, comparer.",
+    footer:"Support d'auto-apprentissage — à faire valider régulièrement par quelqu'un qui maîtrise la récitation.",
+    quizTitle:"Teste-toi", quizSub:"Choisis un niveau : les questions piochent parmi les lettres, les sifât, les règles et les paires à risque.",
+    quizGuess:"Devine la zone d'articulation :", quizCorrect:"Bonne réponse !", quizWrong:"Pas tout à fait —",
+    quizNext:"Question suivante →",
+    diffEasy:"Facile", diffMedium:"Moyen", diffHard:"Difficile",
+    quizScoreLabel:(c,t)=>`Score de la session : ${c} / ${t}`,
+    qLetterName:"Quel est le nom de cette lettre ?",
+    qSifat:(name)=>`Quelle est la bonne description de : « ${name} » ?`,
+    qRule:(desc)=>`Quelle règle correspond à : « ${desc} » ?`,
+    qRisk:"À quelle paire de lettres correspond cette explication ?",
+    modeMcq:"QCM", modeFlash:"Cartes mémo", modeTf:"Vrai / Faux", modeMatch:"Association",
+    flashReveal:"Révéler", flashKnow:"Je savais ✓", flashReview:"À revoir ↻",
+    flashProgress:(i,t,k,r)=>`${i} / ${t} · connues ✓ ${k} · à revoir ↻ ${r}`,
+    flashDone:"Deck terminé ! Relance pour continuer à réviser.", flashRestart:"Recommencer le deck",
+    tfCorrect:"Vrai", tfWrong:"Faux",
+    tfFeedbackCorrect:"Bonne réponse !", tfFeedbackWrong:"Faux — en réalité :",
+    tfNext:"Question suivante →",
+    matchInstructions:"Retrouve les paires lettre ↔ nom.", matchNew:"Nouvelle partie",
+    sifatTitle:"Après les mahâric : les sifât", sifatSub:"Une fois les points d'articulation acquis, ce sont les caractéristiques de prononciation à travailler ensuite.",
+    journalTitle:"Journal de séances", journalSub:"Note en une ligne ce qui a été travaillé, pour visualiser la régularité dans le temps.",
+    journalPlaceholder:"ex : révision ط ض ص ظ avec l'imam", journalAdd:"Ajouter", journalEmpty:"Aucune séance notée pour l'instant.",
+    exportBtn:"Exporter mes données (progression + notes + journal)",
+    importBtn:"Importer une sauvegarde",
+    importSuccess:"Données restaurées avec succès !",
+    importError:"Fichier invalide — impossible de restaurer cette sauvegarde.",
+    sourcesTitle:"Sources", sourcesSub:"Les descriptions par lettre sont compilées à partir de l'enseignement classique du tajwid — à faire valider avec un professeur qualifié. Références consultées pour les schémas et compléments :",
+    blockSource:"Source", sourceNote:"classification traditionnelle des makharij (Sibawayh / Ibn al-Jazari)",
+    rulesTitle:"Toutes les règles du tajwid", rulesSub:"Un aperçu structuré des grandes règles, pour situer les mahâric dans l'ensemble — chaque règle mérite ensuite un travail à part avec un professeur.",
+    navLetters:"Lettres", navQuiz:"Se tester", navRisk:"Paires à risque", navSifat:"Sifât",
+    navRules:"Règles", navJournal:"Journal", navResources:"Vidéos", navSources:"Sources",
+    navTools:"Outils", navStats:"Progrès", navQuran:"Coran",
+    quranTitle:"Le Coran", quranSub:"Texte chargé en direct depuis Al Quran Cloud, pour éviter toute erreur de recopie. Choisis une sourate.",
+    quranLoading:"Chargement...", quranError:"Impossible de charger le texte — vérifie ta connexion internet et réessaie.",
+    quranBack:"← Retour aux sourates", quranShowTrans:"Afficher la traduction",
+    quranOffline:"Sourate déjà enregistrée sur ce téléphone — affichée sans connexion.",
+    quranSearch:"Rechercher une sourate (nom ou numéro)...",
+    quranFavOnly:"⭐ Favoris", quranFavAll:"Toutes",
+    quranNoResult:"Aucune sourate ne correspond à ta recherche.",
+    quranResume:"↺ Reprendre", quranResumeLabel:"Tu en étais à",
+    quranStatusNone:"Non commencée", quranStatusProgress:"En cours de mémorisation", quranStatusMemorized:"Mémorisée",
+    quranTextSearchToggle:"🔎 Chercher un mot dans les sourates déjà téléchargées",
+    quranTextSearchPlaceholder:"Chercher un mot dans le texte...",
+    quranTextSearchNote:"Recherche uniquement dans les sourates déjà consultées hors-ligne.",
+    quranTextSearchNoResult:"Aucun résultat dans les sourates déjà téléchargées.",
+    quranNoteLabel:"Mes notes sur cette sourate", quranNotePlaceholder:"Passage difficile, mot à retravailler...",
+    quranNoteSaved:"Enregistré", quranRevCount:"relectures",
+    quranFontSmaller:"A−", quranFontBigger:"A+",
+    toolsTitle:"Métronome des madd", toolsSub:"Pour garder un temps régulier sur les allongements (2, 4 ou 6 temps).",
+    recTitle:"S'enregistrer", recNote:"Enregistre ta voix puis réécoute-toi, en comparant avec une vidéo de référence. L'accès au micro dépend du navigateur — si ça ne marche pas, utilise l'appli d'enregistrement vocal de ton téléphone à la place.",
+    recStart:"● Démarrer l'enregistrement", recStop:"■ Arrêter", recDenied:"Micro indisponible ou refusé sur ce navigateur — utilise l'appli d'enregistrement vocal de ton téléphone.",
+    metroStart:"Démarrer", metroStop:"Arrêter",
+    statsTitle:"Progrès", statsSub:"Ta régularité dans le temps, et les paliers franchis.",
+    streakCurrent:"Série actuelle", streakBest:"Meilleure série", streakDays:"jours",
+    chartTitle:"Lettres maîtrisées — 14 derniers jours",
+    badge5:"5 lettres maîtrisées", badge15:"15 lettres maîtrisées", badge28:"Les 28 lettres maîtrisées",
+    badgeStreak3:"3 jours de suite", badgeStreak7:"Une semaine de suite", badgeStreak30:"Un mois de suite",
+    badgeJournal1:"Première séance notée", badgeJournal10:"10 séances notées",
+    badgeQuiz10:"10 bonnes réponses au quiz", badgeMatch1:"Première partie d'association gagnée"
+  },
+  tr: {
+    kicker:"Tecvid — mahâric-ul huruf",
+    title:"Harflerin çıkış yerleri",
+    sub:"Dilin ya da boğazın tam olarak nereye yerleşmesi gerektiğini şema üzerinde görmek için her harfi aç, adım adım rehberi oku. İyice oturduğunda işaretle — ilerlemen otomatik kaydedilir.",
+    progress:(d,t)=>`${d} / ${t} harf`,
+    refLabel:"17 mahreci tek bir şema üzerinde gör:",
+    refLink1:"Tam şema — imamfaisal.com ↗",
+    refLink2:"Yazdırılabilir çizelge — equrancoaching.com ↗",
+    zoneGorge:"Boğaz", zoneLangue:"Dil", zoneLevres:"Dudaklar",
+    tipGorge:"Söylerken bir elini boğazına koy. ح ve ع için aynı bölgenin sıkıştığını hissetmelisin — aralarındaki tek fark titreşim (ses).",
+    tipLangue:"ض en zor harf olarak bilinir — bu yüzden « Kur'an harfi » lakabı vardır. Adımları atlamadan gereken zamanı ayır.",
+    blockPlace:"Nasıl konumlanır", blockCompare:"Yakın ses", blockMistake:"Sık yapılan hata",
+    noteLabel:"Kendi notun", notePlaceholder:"örn: salı günü iyi çıktı, cümle sonunda hâlâ tereddüt var…",
+    imgLink:"Bu noktanın görselini gör ↗",
+    riskTitle:"Riskli çiftler",
+    riskSub:"Yeni başlayanlarda en sık görülen karışıklıklar — öncelikle hoca ile kontrol et.",
+    resTitle:"Video kaynakları", resSub:"Her seferinde bir harf: izle, kendini kaydet, karşılaştır.",
+    footer:"Kendi kendine çalışma desteği — düzenli olarak kıraati iyi bilen biriyle kontrol ettir.",
+    quizTitle:"Kendini test et", quizSub:"Bir seviye seç: sorular harflerden, sıfâtlardan, kurallardan ve riskli çiftlerden gelir.",
+    quizGuess:"Çıkış bölgesini tahmin et:", quizCorrect:"Doğru cevap!", quizWrong:"Tam değil —",
+    quizNext:"Sonraki soru →",
+    diffEasy:"Kolay", diffMedium:"Orta", diffHard:"Zor",
+    quizScoreLabel:(c,t)=>`Oturum skoru: ${c} / ${t}`,
+    qLetterName:"Bu harfin adı nedir?",
+    qSifat:(name)=>`« ${name} » için doğru açıklama hangisi?`,
+    qRule:(desc)=>`Şu açıklama hangi kurala karşılık gelir: « ${desc} » ?`,
+    qRisk:"Bu açıklama hangi harf çiftine karşılık gelir?",
+    modeMcq:"Çoktan seçmeli", modeFlash:"Kartlar", modeTf:"Doğru / Yanlış", modeMatch:"Eşleştirme",
+    flashReveal:"Göster", flashKnow:"Biliyordum ✓", flashReview:"Tekrar bak ↻",
+    flashProgress:(i,t,k,r)=>`${i} / ${t} · bilinen ✓ ${k} · tekrar ↻ ${r}`,
+    flashDone:"Deste bitti! Tekrar çalışmak için yeniden başlat.", flashRestart:"Desteyi yeniden başlat",
+    tfCorrect:"Doğru", tfWrong:"Yanlış",
+    tfFeedbackCorrect:"Doğru cevap!", tfFeedbackWrong:"Yanlış — aslında:",
+    tfNext:"Sonraki soru →",
+    matchInstructions:"Harf ↔ isim çiftlerini bul.", matchNew:"Yeni oyun",
+    sifatTitle:"Mahâricten sonra: sıfâtlar", sifatSub:"Çıkış yerleri oturduktan sonra sırada, üzerinde çalışılması gereken telaffuz özellikleri var.",
+    journalTitle:"Çalışma günlüğü", journalSub:"Neyin çalışıldığını tek satırda not et, zamanla düzenliliği görmek için.",
+    journalPlaceholder:"örn: hoca ile ط ض ص ظ tekrarı", journalAdd:"Ekle", journalEmpty:"Henüz not edilen bir çalışma yok.",
+    exportBtn:"Verilerimi dışa aktar (ilerleme + notlar + günlük)",
+    importBtn:"Yedekten geri yükle",
+    importSuccess:"Veriler başarıyla geri yüklendi!",
+    importError:"Geçersiz dosya — bu yedek geri yüklenemedi.",
+    sourcesTitle:"Kaynaklar", sourcesSub:"Harf açıklamaları klasik tecvid öğretiminden derlenmiştir — yetkin bir hocayla doğrulanmalıdır. Şema ve ek bilgiler için başvurulan kaynaklar:",
+    blockSource:"Kaynak", sourceNote:"geleneksel mahâric sınıflandırması (Sibeveyh / İbn el-Cezerî)",
+    rulesTitle:"Tüm tecvid kuralları", rulesSub:"Büyük kuralların genel bir özeti — mahâricin bütün içindeki yerini görmek için. Her kural daha sonra bir hocayla ayrıca çalışılmalıdır.",
+    navLetters:"Harfler", navQuiz:"Kendini test et", navRisk:"Riskli çiftler", navSifat:"Sıfâtlar",
+    navRules:"Kurallar", navJournal:"Günlük", navResources:"Videolar", navSources:"Kaynaklar",
+    navTools:"Araçlar", navStats:"İlerleme", navQuran:"Kur'an",
+    quranTitle:"Kur'an", quranSub:"Metin, kopyalama hatasını önlemek için Al Quran Cloud'dan canlı olarak yükleniyor. Bir sure seç.",
+    quranLoading:"Yükleniyor...", quranError:"Metin yüklenemedi — internet bağlantını kontrol edip tekrar dene.",
+    quranBack:"← Sure listesine dön", quranShowTrans:"Çeviriyi göster",
+    quranOffline:"Bu sure telefonda zaten kayıtlı — internet olmadan gösteriliyor.",
+    quranSearch:"Sure ara (isim veya numara)...",
+    quranFavOnly:"⭐ Favoriler", quranFavAll:"Tümü",
+    quranNoResult:"Aramanla eşleşen sure yok.",
+    quranResume:"↺ Devam et", quranResumeLabel:"Kaldığın yer",
+    quranStatusNone:"Başlanmadı", quranStatusProgress:"Ezberleniyor", quranStatusMemorized:"Ezberlendi",
+    quranTextSearchToggle:"🔎 İndirilen surelerde kelime ara",
+    quranTextSearchPlaceholder:"Metinde kelime ara...",
+    quranTextSearchNote:"Sadece daha önce çevrimdışı görüntülenen surelerde arar.",
+    quranTextSearchNoResult:"İndirilen surelerde sonuç yok.",
+    quranNoteLabel:"Bu sure için notların", quranNotePlaceholder:"Zor bir kısım, üzerinde çalışılacak kelime...",
+    quranNoteSaved:"Kaydedildi", quranRevCount:"tekrar",
+    quranFontSmaller:"A−", quranFontBigger:"A+",
+    toolsTitle:"Med metronomu", toolsSub:"Uzatmalarda (2, 4 ya da 6 elif) düzenli bir tempo tutmak için.",
+    recTitle:"Kendini kaydet", recNote:"Sesini kaydet, sonra dinle ve bir referans videoyla karşılaştır. Mikrofon erişimi tarayıcıya bağlıdır — çalışmazsa telefonunun ses kaydedici uygulamasını kullan.",
+    recStart:"● Kaydı başlat", recStop:"■ Durdur", recDenied:"Bu tarayıcıda mikrofon kullanılamıyor ya da reddedildi — telefonunun ses kaydedici uygulamasını kullan.",
+    metroStart:"Başlat", metroStop:"Durdur",
+    statsTitle:"İlerleme", statsSub:"Zaman içindeki düzenliliğin ve geçilen aşamalar.",
+    streakCurrent:"Güncel seri", streakBest:"En iyi seri", streakDays:"gün",
+    chartTitle:"Öğrenilen harfler — son 14 gün",
+    badge5:"5 harf öğrenildi", badge15:"15 harf öğrenildi", badge28:"28 harfin tamamı öğrenildi",
+    badgeStreak3:"3 gün üst üste", badgeStreak7:"Bir hafta üst üste", badgeStreak30:"Bir ay üst üste",
+    badgeJournal1:"İlk çalışma notu", badgeJournal10:"10 çalışma notu",
+    badgeQuiz10:"Quizde 10 doğru cevap", badgeMatch1:"İlk eşleştirme oyunu kazanıldı"
+  }
+};
+
+// point = repère approximatif sur le profil vocal partagé (viewBox 0 0 200 160)
+const LETTERS = {
+  gorge: [
+    {ar:'ء', point:[178,55],
+      fr:{name:'Hamza', desc:'Fond de la gorge', tip:"Un coup de glotte sec : la gorge se ferme puis se relâche d'un coup, sans aucune friction.", compare:"Le petit blocage avant de dire « euh » en français, ou entre les deux syllabes de « co-opérer ».", mistake:"Ne pas la remplacer par un simple silence — il doit y avoir une vraie coupure nette du son."},
+      tr:{name:'Hemze', desc:'Boğazın en dibi', tip:"Boğaz kapanıp aniden açılır: ani ve kuru bir ses kesilmesi, sürtünme yok.", compare:"Türkçede tam karşılığı yok — 'ah' derken sesin aniden kesildiği an gibi.", mistake:"Sadece sessizlikle değiştirme — gerçek, net bir ses kesilmesi olmalı."}},
+    {ar:'ه', point:[172,60],
+      fr:{name:'Ha léger', desc:'Fond de la gorge, souffle', tip:"Un souffle simple et détendu qui part du fond de la gorge, sans tension ni resserrement.", compare:"Le « h » aspiré de l'anglais « house ».", mistake:"Le confondre avec ح : ici la gorge reste relâchée, il n'y a pas d'effort."},
+      tr:{name:'He', desc:'Boğazın dibi, nefesli', tip:"Boğazın dibinden çıkan sade, gevşek bir nefes — hiç gerilim yok.", compare:"İngilizce 'house' kelimesindeki yumuşak 'h' gibi.", mistake:"ح ile karıştırma: burada boğaz gevşek kalır, hiç sıkışma yoktur."}},
+    {ar:'ع', point:[165,68],
+      fr:{name:'Ayn', desc:'Milieu de la gorge, voisé', tip:"Resserre le milieu de la gorge comme pour un petit effort, et fais vibrer les cordes vocales en même temps.", compare:"Pas d'équivalent en français — un raclement voisé, presque un « a » très serré dans la gorge.", mistake:"Le remplacer par un simple ء : il manque alors le resserrement et la vibration."},
+      tr:{name:'Ayn', desc:'Boğazın ortası, sesli', tip:"Boğazın ortasını hafifçe sıkıştır ve aynı anda ses tellerini titret.", compare:"Türkçede birebir karşılığı yok — boğazdan gelen sesli, sıkışık bir ses.", mistake:"Sadece ء ile değiştirme: burada sıkışma ve titreşim eksik kalır."}},
+    {ar:'ح', point:[168,72],
+      fr:{name:'Ha emphatique', desc:'Milieu de la gorge, souffle', tip:"Même resserrement que ع mais sans voix — comme pour embuer des lunettes.", compare:"Un souffle chaud et appuyé, plus fort qu'un simple « h ».", mistake:"Le prononcer trop en avant, dans la bouche, au lieu de resserrer la gorge."},
+      tr:{name:'Ha', desc:'Boğazın ortası, nefesli', tip:"ع ile aynı sıkışma ama sessiz — gözlük buğulamak gibi, boğazın ortasından.", compare:"Sade 'h'den daha güçlü, sıcak bir nefes.", mistake:"Boğaz yerine ağzın önünden çıkarmak."}},
+    {ar:'غ', point:[152,80],
+      fr:{name:'Ghayn', desc:'Haut de la gorge, voisé', tip:"Un raclement voisé à l'arrière de la bouche, plus reculé et plus doux qu'un « r » français.", compare:"Proche du « r » grasseyé parisien, mais plus profond.", mistake:"Le confondre avec un ر (langue) — le غ vient de la gorge."},
+      tr:{name:'Ğayn', desc:'Boğazın üstü, sesli', tip:"Ağzın arkasında, sesli bir gırtlaksı ses.", compare:"Fransızca gırtlaktan 'r' sesine yakın, ama daha derin.", mistake:"ر (dil harfi) ile karıştırma — غ boğazdan çıkar, dilden değil."}},
+    {ar:'خ', point:[148,85],
+      fr:{name:'Kha', desc:'Haut de la gorge, souffle', tip:"Un raclement sec et soufflé à l'arrière du palais.", compare:"Le « ch » allemand de « Bach » ou le « j » espagnol.", mistake:"Le prononcer trop doucement — il doit y avoir un vrai frottement audible."},
+      tr:{name:'Hı', desc:'Boğazın üstü, nefesli', tip:"Damağın arkasında sert, nefesli bir sürtünme sesi.", compare:"Almanca 'Bach' kelimesindeki 'ch' gibi.", mistake:"Çok yumuşak söylemek — gerçek bir sürtünme sesi duyulmalı."}},
+  ],
+  langue: [
+    {ar:'ق', point:[132,60],
+      fr:{name:'Qaf', desc:'Racine de la langue', tip:"La racine de la langue se plaque contre le palais mou, tout au fond.", compare:"Un « k » très profond, plus sourd et plus reculé que le ك.", mistake:"Le prononcer comme un ك — il doit venir de plus loin."},
+      tr:{name:'Kaf', desc:'Dilin kökü', tip:"Dilin kökü, yumuşak damağın en dibine yaslanır.", compare:"ك'den daha derin ve daha boğuk bir 'k' sesi.", mistake:"ك gibi söylemek — daha derinden, neredeyse boğazdan gelmeli."}},
+    {ar:'ك', point:[118,64],
+      fr:{name:'Kaf (ك)', desc:'Racine, un peu avancée', tip:"Même zone que ق mais un peu plus avancée vers l'avant du palais mou.", compare:"Le « k » français classique de « kilo ».", mistake:"Ne pas assez le différencier du ق, plus profond."},
+      tr:{name:'Kef', desc:'Kökten biraz ileride', tip:"ق ile aynı bölge ama damağın biraz daha önünde.", compare:"Türkçedeki klasik 'k' sesi.", mistake:"ق'dan yeterince ayırt etmemek."}},
+    {ar:'ج', point:[100,68],
+      fr:{name:'Jim', desc:'Milieu de la langue', tip:"Le milieu de la langue se plaque contre le palais puis se relâche d'un coup.", compare:"Le « dj » de « adjectif » ou le « j » anglais de « job ».", mistake:"Le prononcer comme un « j » français mouillé — il doit y avoir un vrai contact suivi d'un relâchement."},
+      tr:{name:'Cim', desc:'Dilin ortası', tip:"Dilin ortası damağa yapışır, sonra aniden ayrılır.", compare:"Türkçedeki 'c' sesi (cam kelimesindeki gibi).", mistake:"Sürtünmeli bir 'j' gibi söylemek — tam bir temas ve ayrılma olmalı."}},
+    {ar:'ش', point:[96,70],
+      fr:{name:'Shin', desc:'Milieu de la langue', tip:"Milieu de langue relevé vers le palais sans contact complet, l'air passe en continu.", compare:"Le « ch » français de « chat ».", mistake:"Aucun piège particulier — proche du français."},
+      tr:{name:'Şın', desc:'Dilin ortası', tip:"Dilin ortası damağa yaklaşır ama değmez, hava sürekli akar.", compare:"Türkçedeki 'ş' sesi.", mistake:"Özel bir tuzağı yok."}},
+    {ar:'ي', point:[94,72],
+      fr:{name:'Ya', desc:'Milieu de la langue', tip:"Milieu de langue relevé vers le palais sans contact, position de semi-voyelle.", compare:"Le « y » français de « yaourt ».", mistake:"Le durcir en une vraie consonne — il doit rester glissé."},
+      tr:{name:'Ye', desc:'Dilin ortası', tip:"Dilin ortası damağa yaklaşır, temas olmadan, yarı ünlü konumu.", compare:"Türkçedeki 'y' sesi.", mistake:"Sert bir ünsüze dönüştürmek — akıcı kalmalı."}},
+    {ar:'ض', point:[85,95],
+      fr:{name:'Dad', desc:'Bord de langue / molaires', tip:"Le bord de la langue (souvent le côté gauche) se plaque contre les molaires supérieures, puis se détache lentement.", compare:"Aucun équivalent en français — la lettre la plus caractéristique de l'arabe.", mistake:"La confondre avec un د ou un ظ. Voir « paires à risque »."},
+      tr:{name:'Dad', desc:'Dilin kenarı / azı dişleri', tip:"Dilin kenarı (genelde sol tarafı) üst azı dişlerine yaslanır, sonra yavaşça çekilir.", compare:"Türkçede tam karşılığı yok — Arapçanın en karakteristik harfi.", mistake:"د veya ظ ile karıştırmak. 'Riskli çiftler' bölümüne bak."}},
+    {ar:'ل', point:[68,75],
+      fr:{name:'Lam', desc:'Bout de langue / gencives', tip:"Bout de langue contre la gencive juste derrière les dents du haut.", compare:"Le « l » français, un peu plus reculé.", mistake:"Aucun piège particulier."},
+      tr:{name:'Lam', desc:'Dil ucu / diş etleri', tip:"Dilin ucu üst dişlerin hemen arkasındaki diş etine değer.", compare:"Türkçedeki 'l' sesi, biraz daha geride.", mistake:"Özel bir tuzağı yok."}},
+    {ar:'ن', point:[66,76],
+      fr:{name:'Nun', desc:'Bout de langue / gencives', tip:"Même zone que ل, avec résonance nasale : laisse l'air sortir aussi par le nez.", compare:"Le « n » français de « nature ».", mistake:"Oublier la résonance nasale en fin de mot ou avant certaines lettres."},
+      tr:{name:'Nun', desc:'Dil ucu / diş etleri', tip:"ل ile aynı bölge, ama genizden rezonansla.", compare:"Türkçedeki 'n' sesi.", mistake:"Kelime sonunda genizden geçen rezonansı unutmak (ğunne)."}},
+    {ar:'ر', point:[64,77],
+      fr:{name:'Ra', desc:'Bout de langue / gencives', tip:"Bout de langue qui vibre légèrement contre la gencive.", compare:"Un « r » roulé espagnol atténué, une seule vibration.", mistake:"Le prononcer comme le « r » français (gorge) — le ر se fait avec la langue."},
+      tr:{name:'Ra', desc:'Dil ucu / diş etleri', tip:"Dilin ucu diş etine hafifçe değip titreşir.", compare:"Hafif bir İspanyolca çarpma 'r'si gibi, tek titreşim.", mistake:"Boğazdan çıkan bir 'r' gibi söylemek — ر dille yapılır, boğazla değil."}},
+    {ar:'ط', point:[54,82],
+      fr:{name:'Ta emphatique', desc:'Bout de langue / base des dents', tip:"Bout de langue plaqué à la base des dents du haut, dos de la langue bombé vers le palais.", compare:"Un « t » plus « lourd » et plus sourd que le ت.", mistake:"Ne pas bomber le dos de la langue — sans ça, on obtient un simple ت."},
+      tr:{name:'Tı', desc:'Dil ucu / diş dibi', tip:"Dilin ucu üst dişlerin dibine yaslanır, dilin sırtı damağa doğru kabarır.", compare:"ت'den daha 'kalın' ve boğuk bir 't'.", mistake:"Dilin sırtını kabartmamak — o zaman sade bir ت çıkar."}},
+    {ar:'د', point:[52,83],
+      fr:{name:'Dal', desc:'Bout de langue / base des dents', tip:"Bout de langue à la base des dents du haut, voisé, sans bombement.", compare:"Le « d » français de « date ».", mistake:"Le confondre avec ض — voir « paires à risque »."},
+      tr:{name:'Dal', desc:'Dil ucu / diş dibi', tip:"ط ile aynı bölge ama sesli, kabarma yok.", compare:"Türkçedeki 'd' sesi.", mistake:"ض ile karıştırmak — 'riskli çiftler' bölümüne bak."}},
+    {ar:'ت', point:[50,84],
+      fr:{name:'Ta', desc:'Bout de langue / base des dents', tip:"Même zone que د mais sans voix.", compare:"Le « t » français de « table ».", mistake:"Aucun piège particulier."},
+      tr:{name:'Te', desc:'Dil ucu / diş dibi', tip:"د ile aynı bölge ama sessiz.", compare:"Türkçedeki 't' sesi.", mistake:"Özel bir tuzağı yok."}},
+    {ar:'ث', point:[42,86],
+      fr:{name:'Tha', desc:'Bout de langue entre les dents', tip:"Bout de langue légèrement entre les dents du haut et du bas.", compare:"Le « th » anglais de « think ».", mistake:"Le remplacer par un « s » ou un « t »."},
+      tr:{name:'Se', desc:'Dil ucu, dişler arasında', tip:"Dilin ucu üst ve alt dişlerin arasına hafifçe girer.", compare:"İngilizce 'think' kelimesindeki 'th' gibi.", mistake:"'s' veya 't' ile değiştirmek."}},
+    {ar:'ذ', point:[41,87],
+      fr:{name:'Dhal', desc:'Bout de langue entre les dents', tip:"Même position que ث mais voisée.", compare:"Le « th » anglais de « this ».", mistake:"Le remplacer par un « z » ou un « d »."},
+      tr:{name:'Zel', desc:'Dil ucu, dişler arasında', tip:"ث ile aynı yer ama sesli.", compare:"İngilizce 'this' kelimesindeki 'th' gibi.", mistake:"'z' veya 'd' ile değiştirmek."}},
+    {ar:'ظ', point:[40,88],
+      fr:{name:'Za emphatique', desc:'Bout de langue entre les dents', tip:"Même position que ذ mais avec le dos de la langue bombé.", compare:"Aucun équivalent français direct.", mistake:"La confondre avec ض — voir « paires à risque »."},
+      tr:{name:'Zı', desc:'Dil ucu, dişler arasında', tip:"ذ ile aynı yer ama dilin sırtı kabarık — 'kalın' hali.", compare:"Doğrudan Türkçe karşılığı yok.", mistake:"ض ile karıştırmak — 'riskli çiftler' bölümüne bak."}},
+    {ar:'ص', point:[46,90],
+      fr:{name:'Sad', desc:'Sifflante, proche des dents', tip:"Sifflante emphatique : la langue se bombe vers le palais pendant le sifflement.", compare:"Un « s » plus grave et plus ample que le س.", mistake:"Le prononcer comme un س ordinaire, sans bomber la langue."},
+      tr:{name:'Sad', desc:'Islık sesi, dişlere yakın', tip:"Kalın bir ıslık sesi: ıslık sırasında dilin sırtı damağa doğru kabarır.", compare:"س'den daha kalın ve daha derin bir 's'.", mistake:"Dili kabartmadan sade bir س gibi söylemek."}},
+    {ar:'س', point:[45,91],
+      fr:{name:'Sin', desc:'Sifflante, proche des dents', tip:"Sifflante simple, langue plate, l'air siffle entre langue et dents.", compare:"Le « s » français de « soleil ».", mistake:"Aucun piège particulier."},
+      tr:{name:'Sin', desc:'Islık sesi, dişlere yakın', tip:"Sade ıslık sesi, dil düz, hava diş ile dil arasından ıslık yapar.", compare:"Türkçedeki 's' sesi.", mistake:"Özel bir tuzağı yok."}},
+    {ar:'ز', point:[44,92],
+      fr:{name:'Zay', desc:'Sifflante, proche des dents', tip:"Même zone que س mais voisée.", compare:"Le « z » français de « zèbre ».", mistake:"Aucun piège particulier."},
+      tr:{name:'Ze', desc:'Islık sesi, dişlere yakın', tip:"س ile aynı yer ama sesli.", compare:"Türkçedeki 'z' sesi.", mistake:"Özel bir tuzağı yok."}},
+  ],
+  levres: [
+    {ar:'ف', point:[30,95],
+      fr:{name:'Fa', desc:'Lèvre inférieure / dents du haut', tip:"La lèvre inférieure vient toucher légèrement les dents du haut.", compare:"Le « f » français de « feu ».", mistake:"Aucun piège particulier."},
+      tr:{name:'Fe', desc:'Alt dudak / üst dişler', tip:"Alt dudak üst dişlere hafifçe değer.", compare:"Türkçedeki 'f' sesi.", mistake:"Özel bir tuzağı yok."}},
+    {ar:'ب', point:[22,98],
+      fr:{name:'Ba', desc:'Les deux lèvres', tip:"Les deux lèvres se ferment puis s'ouvrent d'un coup, voisé.", compare:"Le « b » français de « bateau ».", mistake:"Aucun piège particulier."},
+      tr:{name:'Be', desc:'İki dudak', tip:"İki dudak kapanır, sonra aniden açılır, sesli.", compare:"Türkçedeki 'b' sesi.", mistake:"Özel bir tuzağı yok."}},
+    {ar:'م', point:[20,99],
+      fr:{name:'Mim', desc:'Les deux lèvres', tip:"Même fermeture que ب mais avec résonance nasale prolongée.", compare:"Le « m » français de « mer ».", mistake:"Oublier la résonance nasale en fin de mot."},
+      tr:{name:'Mim', desc:'İki dudak', tip:"ب ile aynı kapanma ama uzun genizden rezonansla.", compare:"Türkçedeki 'm' sesi.", mistake:"Kelime sonunda genizden rezonansı unutmak."}},
+    {ar:'و', point:[18,100],
+      fr:{name:'Waw', desc:'Les deux lèvres, arrondies', tip:"Lèvres arrondies et légèrement projetées vers l'avant.", compare:"Le « ou » français de « loup ».", mistake:"Le durcir en un vrai « v » ou « b » — il doit rester glissé."},
+      tr:{name:'Vav', desc:'İki dudak, yuvarlak', tip:"Dudaklar yuvarlanır ve hafifçe öne uzanır.", compare:"Fransızca 'ou' veya İngilizce 'w' gibi yumuşak, sert bir 'v' değil.", mistake:"Sert bir 'v' ya da 'b'ye dönüştürmek — akıcı kalmalı."}},
+  ]
+};
+
+const RISK_PAIRS = [
+  {pair:'ض ↔ د ↔ ظ ↔ ذ',
+    fr:"Quatre sons de langue proches. ض et د/ط se font à la base des dents ou sur les molaires, bouche quasi fermée ; ذ/ظ se disent langue légèrement entre les dents. Le ض est emphatique et vient du bord de la langue, pas du bout.",
+    tr:"Dört yakın dil sesi. ض ve د/ط diş dibinde ya da azı dişlerinde, ağız neredeyse kapalıyken çıkar; ذ/ظ ise dil hafifçe dişler arasındayken söylenir. ض kalındır ve dilin kenarından çıkar, ucundan değil."},
+  {pair:'ع ↔ ء',
+    fr:"Le ء est une coupure sèche du son sans effort de gorge. Le ع demande un vrai resserrement voisé au milieu de la gorge — si rien ne se serre, c'est probablement un ء.",
+    tr:"ء boğaz hiç sıkışmadan, kuru bir ses kesilmesidir. ع ise boğazın ortasında gerçek, sesli bir sıkışma ister — hiçbir yer sıkışmıyorsa muhtemelen ء'dir."},
+  {pair:'ص ↔ س',
+    fr:"Même famille de sifflante, mais ص est « lourd » : le dos de la langue se bombe vers le palais pendant le sifflement, ce qui donne un son plus grave que le س, plus fin et aigu.",
+    tr:"Aynı ıslık ailesinden ama ص 'kalın': ıslık sırasında dilin sırtı damağa doğru kabarır, bu da س'den daha kalın bir ses verir."},
+  {pair:'ق ↔ ك',
+    fr:"Les deux partent de la racine de la langue, mais ق est plus reculé (palais mou) et sonne plus sourd/profond, alors que ك est un peu plus avancé et plus clair.",
+    tr:"İkisi de dilin kökünden çıkar, ama ق daha geridedir (yumuşak damak) ve daha boğuk/derin, ك ise biraz daha öndedir ve daha nettir."},
+  {pair:'ح ↔ ه',
+    fr:"Le ه est un souffle simple et détendu, presque une expiration. Le ح demande un resserrement volontaire au milieu de la gorge — plus de tension, un son plus « râpeux ».",
+    tr:"ه sade, gevşek bir nefestir, neredeyse bir soluk verme gibi. ح ise boğazın ortasında bilinçli bir sıkışma ister — daha gergin, daha 'hırıltılı' bir ses."},
+];
+
+const SIFAT = [
+  {fr:{name:"Tafkhim / Tarqiq (emphatique / léger)", desc:"Les lettres ط ض ص ظ (et parfois خ غ ق) se disent avec le dos de la langue bombé vers le palais, donnant un son plus « lourd ». Toutes les autres restent « légères »."},
+   tr:{name:"Tafhim / Terkik (kalın / ince)", desc:"ط ض ص ظ harfleri (bazen خ غ ق da) dilin sırtı damağa doğru kabararak söylenir, daha 'kalın' bir ses verir. Diğer harfler 'ince' kalır."}},
+  {fr:{name:"Qalqalah (rebond)", desc:"5 lettres — ق ط ب ج د — rebondissent légèrement quand elles portent un soukoun, comme un petit écho sec."},
+   tr:{name:"Kalkale (sekme)", desc:"5 harf — ق ط ب ج د — sükun taşıdığında hafifçe sekerek çıkar, küçük ve kuru bir yankı gibi."}},
+  {fr:{name:"Ghunna (résonance nasale)", desc:"Présente sur ن et م, surtout avec une chadda ou dans certaines règles de noun sakina et tanwin."},
+   tr:{name:"Gunne (genizden ses)", desc:"ن ve م harflerinde, özellikle şedde taşıdıklarında ya da bazı nun sakin/tenvin kurallarında bulunur."}},
+  {fr:{name:"Safir (sifflement)", desc:"ص س ز produisent naturellement un sifflement net — à ne pas adoucir ni exagérer."},
+   tr:{name:"Safir (ıslık sesi)", desc:"ص س ز harfleri doğal olarak net bir ıslık sesi verir — ne yumuşatılmalı ne abartılmalı."}},
+];
+
+const RULES = [
+  { fr:"Noun Sakina (نْ) et Tanwin", tr:"Nun Sakin (نْ) ve Tenvin",
+    items:[
+      {fr:{name:"Idh-har (إظهار)", desc:"Devant les 6 lettres de gorge (ء ه ع ح غ خ), le نْ/tanwin se prononce clairement, sans fusion ni voilage."},
+       tr:{name:"İzhar (إظهار)", desc:"6 boğaz harfinin (ء ه ع ح غ خ) önünde, نْ/tenvin net ve açık okunur, hiçbir kaynaşma olmaz."}},
+      {fr:{name:"Idgham (إدغام)", desc:"Devant ي ن م و : fusion avec résonance nasale (idgham avec ghunna). Devant ل ر : fusion complète, sans résonance (idgham sans ghunna)."},
+       tr:{name:"İdgam (إدغام)", desc:"ي ن م و önünde: genizden sesle kaynaşma (idgam-ı magunne). ل ر önünde: tam kaynaşma, genizden ses olmadan (idgam-ı bilagunne)."}},
+      {fr:{name:"Iqlab (إقلاب)", desc:"Devant ب, le نْ/tanwin se transforme en م avec une légère résonance nasale."},
+       tr:{name:"İklab (إقلاب)", desc:"ب önünde, نْ/tenvin hafif bir genizden sesle م'e dönüşür."}},
+      {fr:{name:"Ikhfa (إخفاء)", desc:"Devant les 15 lettres restantes : son voilé, entre le net et la fusion, avec résonance nasale."},
+       tr:{name:"İhfa (إخفاء)", desc:"Kalan 15 harfin önünde: net ile kaynaşma arasında, genizden sesli, kapalı bir ses."}},
+    ]},
+  { fr:"Meem Sakina (مْ)", tr:"Mim Sakin (مْ)",
+    items:[
+      {fr:{name:"Idgham shafawi", desc:"Devant un autre م : fusion complète avec résonance nasale."},
+       tr:{name:"İdgam-ı şefevî", desc:"Başka bir م önünde: genizden sesle tam kaynaşma."}},
+      {fr:{name:"Ikhfa shafawi", desc:"Devant ب : son voilé avec résonance nasale, lèvres fermées."},
+       tr:{name:"İhfa-i şefevî", desc:"ب önünde: dudaklar kapalıyken, genizden sesli kapalı bir ses."}},
+      {fr:{name:"Idh-har shafawi", desc:"Devant toutes les autres lettres : prononciation claire, sans fusion ni voilage."},
+       tr:{name:"İzhar-ı şefevî", desc:"Diğer tüm harflerin önünde: açık ve net, kaynaşma ya da kapanma olmadan."}},
+    ]},
+  { fr:"Madd — l'allongement", tr:"Med — uzatma",
+    items:[
+      {fr:{name:"Madd tabii (naturel, 2 temps)", desc:"ا و ي précédées de leur voyelle correspondante, sans hamza ni soukoun juste après."},
+       tr:{name:"Med-di tabiî (2 elif)", desc:"ا و ي, kendi harekesinden hemen sonra gelir, ardından hemze ya da sükun yoktur."}},
+      {fr:{name:"Madd muttasil (obligatoire)", desc:"Allongement (4-5 temps) quand un hamza suit la lettre de madd dans le même mot."},
+       tr:{name:"Med-di muttasıl (vacip)", desc:"Med harfinden sonra aynı kelimede hemze geldiğinde uzatılır (4-5 elif)."}},
+      {fr:{name:"Madd munfasil", desc:"Allongement (souvent 4 temps) quand le hamza suit dans le mot suivant."},
+       tr:{name:"Med-di munfasıl", desc:"Hemze bir sonraki kelimede geldiğinde uzatılır (genelde 4 elif)."}},
+      {fr:{name:"Madd lazim", desc:"Allongement maximal (6 temps) devant une lettre portant une chadda ou un soukoun permanent."},
+       tr:{name:"Med-di lâzım", desc:"Şeddeli ya da kalıcı sükunlu bir harfin önünde en uzun uzatma (6 elif)."}},
+      {fr:{name:"Madd aarid lissukun", desc:"Allongement (2, 4 ou 6 temps au choix) quand on s'arrête sur une lettre normalement suivie d'une voyelle courte."},
+       tr:{name:"Med-di ârız lissükun", desc:"Normalde kısa harekeli olan bir harfte durulduğunda, tercihe göre 2, 4 ya da 6 elif uzatılır."}},
+    ]},
+  { fr:"La lettre Lam", tr:"Lam harfi",
+    items:[
+      {fr:{name:"Lam de « Allah »", desc:"Épais (tafkhim) après une fatha ou une damma ; fin (tarqiq) après une kasra."},
+       tr:{name:"Allah lafzındaki Lam", desc:"Fetha ya da ötreden sonra kalın (tafhim); esreden sonra ince (terkik) okunur."}},
+      {fr:{name:"Lam shamsiya / qamariya", desc:"Article « ال » : shamsiya — le lam s'assimile (non prononcé, lettre suivante doublée) devant 14 lettres solaires. Qamariya — le lam se prononce clairement devant les 14 lettres lunaires."},
+       tr:{name:"Şemsî / Kamerî Lam", desc:"« ال » takısı: şemsî — lam okunmaz, sonraki harf şeddeli okunur (14 şems harfi). Kamerî — lam açıkça okunur (14 kamer harfi)."}},
+    ]},
+  { fr:"La lettre Ra", tr:"Ra harfi",
+    items:[
+      {fr:{name:"Ra épais (tafkhim)", desc:"Par défaut, sauf dans les cas précis ci-dessous."},
+       tr:{name:"Kalın Ra (tafhim)", desc:"Aşağıdaki özel durumlar dışında, varsayılan olarak kalın okunur."}},
+      {fr:{name:"Ra fin (tarqiq)", desc:"Après une kasra qui n'est pas suivie d'une lettre emphatique."},
+       tr:{name:"İnce Ra (terkik)", desc:"Kalın bir harfle devam etmeyen bir esreden sonra ince okunur."}},
+    ]},
+  { fr:"Waqf — les arrêts", tr:"Vakıf — durmalar",
+    items:[
+      {fr:{name:"Waqf lazim (م)", desc:"Arrêt obligatoire — continuer changerait le sens."},
+       tr:{name:"Vakf-ı lâzım (م)", desc:"Zorunlu durak — devam etmek anlamı bozar."}},
+      {fr:{name:"Waqf jaiz (ج)", desc:"Arrêt permis mais non obligatoire, au choix du lecteur."},
+       tr:{name:"Vakf-ı câiz (ج)", desc:"Durmak serbesttir, okuyucunun tercihine bırakılmıştır."}},
+      {fr:{name:"Waqf mamnou (لا)", desc:"Arrêt interdit — le sens de la phrase ne serait pas complet."},
+       tr:{name:"Vakf-ı memnû (لا)", desc:"Durmak yasaktır — cümlenin anlamı tamamlanmamış olur."}},
+    ]},
+];
+
+const RESOURCES = {
+  fr: [
+    {title:"MAKHÂRIJ AL HOUROUF — vue d'ensemble en image", note:"Présentation visuelle des points d'articulation des 28 lettres.", url:"https://www.youtube.com/watch?v=wfp1WQPfd9g"},
+    {title:"Makharijoul hourouf — partie 1/3", note:"Série Tajwid n°3 : introduction aux zones d'articulation.", url:"https://www.youtube.com/watch?v=Q_y7RVR_bI8"},
+    {title:"Makharijoul hourouf — partie 2/3", note:"Suite de la série, zones langue et lèvres.", url:"https://www.youtube.com/watch?v=w_daJy0_2hg"},
+    {title:"Makharijoul hourouf — partie 3/3", note:"Fin de la série, révision complète.", url:"https://www.youtube.com/watch?v=kMPYGDY4kvw"},
+  ],
+  tr: [
+    {title:"Harflerin mahreç (çıkış) yerleri — Hafız Davut Kaya", note:"Ders 02, tecvidli Kur'an öğretimi serisinden.", url:"https://www.youtube.com/watch?v=tpoSFszQu20"},
+    {title:"Pratik Mahreç Sistemi — 1", note:"Harflerin çıkış yerlerini pratik bir sistemle anlatan ders.", url:"https://www.youtube.com/watch?v=cice76ngqNA"},
+    {title:"Mahreç Sistemi — 2. Bölüm", note:"Serinin devamı.", url:"https://www.youtube.com/watch?v=4WClyGtBnQ0"},
+    {title:"Lâm, Nûn ve Râ harflerinin mahreci", note:"Tecvid Dersleri 6 — dil ucundan çıkan harfler.", url:"https://www.youtube.com/watch?v=y2CGC83DTNU"},
+    {title:"Fatih Çollak — Harf Talimi", note:"Harflerin mahreçleri, tashih-i hurûf odaklı.", url:"https://www.youtube.com/watch?v=X8-Q7E09CpA"},
+    {title:"Pratik Kur'an Öğren — Mahreçler (7/13)", note:"Fatih Sürmeneli'nin tam serisinden bir bölüm.", url:"https://www.youtube.com/watch?v=EDpzsyMDFQc"},
+  ],
+  autre: [
+    {title:"tecvid.org — Mahreçler (Harflerin Çıkış Yerleri)", note:"Explication théorique détaillée des 5 zones d'articulation.", url:"https://tecvid.org/2-ders-mahrecler-harflerin-cikis-yerleri/"},
+    {title:"Application Tarteel", note:"Retour automatique sur la récitation — utile en appoint.", url:"https://www.tarteel.ai"},
+  ]
+};
+
+const STORAGE_KEY = 'mahrec-progress-v3';
+let state = {};
+let lang = 'fr';
+
+function letterId(zone, idx){ return zone + '-' + idx; }
+
+function profileSvg(point, big){
+  const [x,y] = point;
+  return `
+    <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20,110 C10,90 12,60 30,40 C48,20 80,12 115,15 C150,18 178,32 188,55 C193,68 190,82 180,90 L176,108 C174,116 167,119 159,116 L154,126 C152,132 144,134 138,130 L120,132 C95,134 65,128 45,116 C34,110 25,120 20,110 Z"
+        fill="#fff" stroke="#DCD2B4" stroke-width="2"/>
+      <path d="M170,50 C150,55 125,68 108,82 C92,94 72,98 55,92" fill="none" stroke="#B0812B" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <circle cx="${x}" cy="${y}" r="${big ? 8 : 6}" fill="#2E6B4E"/>
+      <circle cx="${x}" cy="${y}" r="${big ? 13 : 10}" fill="#2E6B4E" opacity="0.25"/>
+    </svg>
+  `;
+}
+
+function applyStaticText(){
+  const t = UI[lang];
+  document.getElementById('kicker').textContent = t.kicker;
+  document.getElementById('mainTitle').textContent = t.title;
+  document.getElementById('mainSub').textContent = t.sub;
+  document.getElementById('refLabel').textContent = t.refLabel;
+  document.getElementById('refLink1').textContent = t.refLink1;
+  document.getElementById('refLink2').textContent = t.refLink2;
+  document.getElementById('head-gorge').textContent = t.zoneGorge;
+  document.getElementById('head-langue').textContent = t.zoneLangue;
+  document.getElementById('head-levres').textContent = t.zoneLevres;
+  document.getElementById('tip-gorge').textContent = t.tipGorge;
+  document.getElementById('tip-langue').textContent = t.tipLangue;
+  document.getElementById('riskTitle').textContent = t.riskTitle;
+  document.getElementById('riskSub').textContent = t.riskSub;
+  document.getElementById('resTitle').textContent = t.resTitle;
+  document.getElementById('resSub').textContent = t.resSub;
+  document.getElementById('footerText').textContent = t.footer;
+  document.getElementById('quizTitle').textContent = t.quizTitle;
+  document.getElementById('quizSub').textContent = t.quizSub;
+  document.getElementById('sifatTitle').textContent = t.sifatTitle;
+  document.getElementById('sifatSub').textContent = t.sifatSub;
+  document.getElementById('journalTitle').textContent = t.journalTitle;
+  document.getElementById('journalSub').textContent = t.journalSub;
+  document.getElementById('journalInput').placeholder = t.journalPlaceholder;
+  document.getElementById('journalAddBtn').textContent = t.journalAdd;
+  document.getElementById('exportBtn').textContent = t.exportBtn;
+  document.getElementById('importBtn').textContent = t.importBtn;
+  document.getElementById('sourcesTitle').textContent = t.sourcesTitle;
+  document.getElementById('sourcesSub').textContent = t.sourcesSub;
+  document.getElementById('rulesTitle').textContent = t.rulesTitle;
+  document.getElementById('rulesSub').textContent = t.rulesSub;
+  document.getElementById('quranTitle').textContent = t.quranTitle;
+  document.getElementById('quranSub').textContent = t.quranSub;
+  document.getElementById('toolsTitle').textContent = t.toolsTitle;
+  document.getElementById('recTitle').textContent = t.recTitle;
+  document.getElementById('recNote').textContent = t.recNote;
+  document.getElementById('toolsSub').textContent = t.toolsSub;
+  document.getElementById('statsTitle').textContent = t.statsTitle;
+  document.getElementById('statsSub').textContent = t.statsSub;
+}
+
+const NAV_ITEMS = ['letters','quiz','risk','sifat','rules','tools','stats','journal','quran','resources','sources'];
+let currentPage = 'letters';
+
+function renderNav(){
+  const t = UI[lang];
+  const labels = {
+    letters:t.navLetters, quiz:t.navQuiz, risk:t.navRisk, sifat:t.navSifat,
+    rules:t.navRules, tools:t.navTools, stats:t.navStats, journal:t.navJournal,
+    quran:t.navQuran, resources:t.navResources, sources:t.navSources
+  };
+  document.getElementById('appNav').innerHTML = NAV_ITEMS.map(p => `
+    <button class="${p === currentPage ? 'active' : ''}" data-page="${p}">${labels[p]}</button>
+  `).join('');
+  document.querySelectorAll('#appNav button').forEach(btn=>{
+    btn.addEventListener('click', ()=> showPage(btn.dataset.page));
+  });
+}
+
+function showPage(page){
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.toggle('active', p.dataset.page === page);
+  });
+  document.querySelectorAll('#appNav button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.page === page);
+  });
+  if(page === 'tools') renderTools();
+  if(page === 'stats') renderStatsPage();
+  if(page === 'quran') loadSurahList();
+  window.scrollTo({top:0, behavior:'auto'});
+}
+
+function renderLetters(){
+  const t = UI[lang];
+  let total = 0, doneTotal = 0;
+  Object.entries(LETTERS).forEach(([zone, arr])=>{
+    const container = document.getElementById('zone-' + zone);
+    container.innerHTML = '';
+    let zoneDone = 0;
+    arr.forEach((l, idx)=>{
+      total++;
+      const id = letterId(zone, idx);
+      const entry = state[id] || {done:false, note:''};
+      if(entry.done){ doneTotal++; zoneDone++; }
+      const c = l[lang];
+
+      const card = document.createElement('div');
+      card.className = 'letter-card' + (entry.done ? ' done' : '');
+      card.innerHTML = `
+        <div class="letter-row">
+          <span class="check" data-role="check">${entry.done ? '✓' : ''}</span>
+          <span class="letter-ar-badge">${l.ar}</span>
+          <span class="letter-main">
+            <div class="letter-name">${c.name}</div>
+            <div class="letter-desc">${c.desc}</div>
+          </span>
+          <span class="caret">▸</span>
+        </div>
+        <div class="letter-detail">
+          <div class="letter-detail-inner">
+            <div class="detail-visual">
+              ${profileSvg(l.point, true)}
+              <div class="detail-big-ar">${l.ar}</div>
+              <div class="detail-zone-tag">${c.desc}</div>
+              <a class="detail-img-link" target="_blank" rel="noopener"
+                 href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('makhraj ' + c.name + ' ' + l.ar + ' articulation point tajweed diagram')}">
+                 ${t.imgLink}
+              </a>
+            </div>
+            <div class="detail-text">
+              <div class="detail-block">
+                <div class="detail-block-label">${t.blockPlace}</div>
+                <div class="detail-block-text">${c.tip}</div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-block-label">${t.blockCompare}</div>
+                <div class="detail-block-text">${c.compare}</div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-block-label">${t.blockMistake}</div>
+                <div class="detail-block-text">${c.mistake}</div>
+              </div>
+              <div class="detail-block">
+                <div class="detail-block-label">${t.blockSource}</div>
+                <div class="detail-block-text"><a href="https://tecvid.org/2-ders-mahrecler-harflerin-cikis-yerleri/" target="_blank" rel="noopener">tecvid.org</a> — ${t.sourceNote}</div>
+              </div>
+              <label class="letter-note-label">${t.noteLabel}</label>
+              <textarea class="letter-note" placeholder="${t.notePlaceholder}">${entry.note}</textarea>
+            </div>
+          </div>
+        </div>
+      `;
+      const row = card.querySelector('.letter-row');
+      const check = card.querySelector('[data-role="check"]');
+      const textarea = card.querySelector('.letter-note');
+      row.addEventListener('click', ()=> card.classList.toggle('open'));
+      check.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDone(id); });
+      textarea.addEventListener('click', (e)=> e.stopPropagation());
+      textarea.addEventListener('change', ()=> saveNote(id, textarea.value));
+      container.appendChild(card);
+    });
+    document.getElementById('count-' + zone).textContent = zoneDone + '/' + arr.length;
+  });
+  document.getElementById('progressLabel').textContent = t.progress(doneTotal, total);
+  document.getElementById('progressFill').style.width = (total ? (doneTotal/total*100) : 0) + '%';
+}
+
+async function persist(){
+  try{ await window.storage.set(STORAGE_KEY, JSON.stringify(state), false); }
+  catch(e){ console.error('Save failed', e); }
+}
+function toggleDone(id){
+  const entry = state[id] || {done:false, note:''};
+  entry.done = !entry.done;
+  state[id] = entry;
+  renderLetters();
+  persist();
+}
+function saveNote(id, value){
+  const entry = state[id] || {done:false, note:''};
+  entry.note = value;
+  state[id] = entry;
+  persist();
+}
+async function loadState(){
+  try{
+    const result = await window.storage.get(STORAGE_KEY, false);
+    if(result && result.value) state = JSON.parse(result.value);
+  }catch(e){ state = {}; }
+  renderLetters();
+}
+
+function renderRisks(){
+  document.getElementById('riskGrid').innerHTML = RISK_PAIRS.map(r => {
+    const letters = r.pair.split('↔').map(s=>s.trim());
+    const imgs = letters.map(le => `<a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('makhraj ' + le + ' articulation point tajweed')}" target="_blank" rel="noopener">${le} ↗</a>`).join('');
+    return `
+    <div class="risk-item">
+      <div class="risk-pair">${r.pair}</div>
+      <div class="risk-desc">${r[lang]}</div>
+      <div class="risk-imgs">${imgs}</div>
+    </div>
+  `;
+  }).join('');
+}
+
+function renderResources(){
+  Object.entries(RESOURCES).forEach(([key, items])=>{
+    document.getElementById('res-' + key).innerHTML = items.map((r, i)=>`
+      <a class="res-item" href="${r.url}" target="_blank" rel="noopener">
+        <span class="res-num">${String(i+1).padStart(2,'0')}</span>
+        <span>
+          <div class="res-title">${r.title}</div>
+          <div class="res-note">${r.note}</div>
+        </span>
+      </a>
+    `).join('');
+  });
+}
+
+function renderSifat(){
+  document.getElementById('sifatGrid').innerHTML = SIFAT.map(s => `
+    <div class="sifat-item">
+      <div class="sifat-name">${s[lang].name}</div>
+      <div class="sifat-desc">${s[lang].desc}</div>
+    </div>
+  `).join('');
+}
+
+function renderRules(){
+  document.getElementById('rulesContainer').innerHTML = RULES.map(cat => `
+    <div class="rule-category">
+      <div class="rule-category-title">${cat[lang]}</div>
+      <div class="rule-grid">
+        ${cat.items.map(it => `
+          <div class="rule-item">
+            <div class="rule-name">${it[lang].name}</div>
+            <div class="rule-desc">${it[lang].desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ---- Quiz : moteur générique avec niveaux de difficulté ----
+const FLAT_LETTERS = [];
+Object.entries(LETTERS).forEach(([zone, arr])=>{
+  arr.forEach((l, idx)=> FLAT_LETTERS.push({zone, idx, l}));
+});
+const FLAT_RULES = [];
+RULES.forEach(cat=>{ cat.items.forEach(it=> FLAT_RULES.push({cat, it})); });
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pickRandom(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+function genZone(){
+  const t = UI[lang];
+  const item = pickRandom(FLAT_LETTERS);
+  const zones = ['gorge','langue','levres'];
+  const zoneLabels = {gorge:t.zoneGorge, langue:t.zoneLangue, levres:t.zoneLevres};
+  const options = zones.map(z=>zoneLabels[z]);
+  return {
+    display: item.l.ar, displayIsText:false,
+    prompt: t.quizGuess,
+    options, correctIndex: zones.indexOf(item.zone),
+    explanation: item.l[lang].tip
+  };
+}
+
+function genLetterName(hard){
+  const t = UI[lang];
+  const item = pickRandom(FLAT_LETTERS);
+  const correctName = item.l[lang].name;
+  let pool = hard
+    ? FLAT_LETTERS.filter(x => x.zone === item.zone && x.l[lang].name !== correctName)
+    : FLAT_LETTERS.filter(x => x.l[lang].name !== correctName);
+  if(pool.length < 3) pool = FLAT_LETTERS.filter(x => x.l[lang].name !== correctName);
+  const distractors = shuffle(pool).slice(0,3).map(x => x.l[lang].name);
+  const options = shuffle([correctName, ...distractors]);
+  return {
+    display: item.l.ar, displayIsText:false,
+    prompt: t.qLetterName,
+    options, correctIndex: options.indexOf(correctName),
+    explanation: item.l[lang].desc + ' — ' + item.l[lang].tip
+  };
+}
+
+function genSifatMatch(){
+  const t = UI[lang];
+  const item = pickRandom(SIFAT);
+  const correctDesc = item[lang].desc;
+  const pool = shuffle(SIFAT.filter(s => s !== item)).slice(0,3).map(s => s[lang].desc);
+  const options = shuffle([correctDesc, ...pool]);
+  return {
+    display: item[lang].name, displayIsText:true,
+    prompt: t.qSifat(item[lang].name),
+    options, correctIndex: options.indexOf(correctDesc),
+    explanation: correctDesc
+  };
+}
+
+function genRuleName(){
+  const t = UI[lang];
+  const item = pickRandom(FLAT_RULES);
+  const correctName = item.it[lang].name;
+  const correctDesc = item.it[lang].desc;
+  let pool = FLAT_RULES.filter(x => x.it[lang].name !== correctName);
+  const distractors = shuffle(pool).slice(0,3).map(x => x.it[lang].name);
+  const options = shuffle([correctName, ...distractors]);
+  return {
+    display: null, displayIsText:false,
+    prompt: t.qRule(correctDesc),
+    options, correctIndex: options.indexOf(correctName),
+    explanation: item.cat[lang] + ' — ' + correctName
+  };
+}
+
+function genRiskPair(){
+  const t = UI[lang];
+  const item = pickRandom(RISK_PAIRS);
+  const correctDesc = item[lang];
+  const pool = shuffle(RISK_PAIRS.filter(r => r !== item)).slice(0,3).map(r => r.pair);
+  const options = shuffle([item.pair, ...pool]);
+  return {
+    display: null, displayIsText:false,
+    prompt: correctDesc,
+    promptIsQuestion:true,
+    options, correctIndex: options.indexOf(item.pair),
+    explanation: t.qRisk
+  };
+}
+
+const QUESTION_POOLS = {
+  easy: [ genZone, genZone, () => genLetterName(false) ],
+  medium: [ () => genLetterName(false), genSifatMatch, genZone ],
+  hard: [ () => genLetterName(true), genRuleName, genRiskPair, genSifatMatch ]
+};
+
+let quizDifficulty = 'easy';
+let quizScore = { correct: 0, total: 0 };
+let quizCurrentQ = null;
+let quizMode = 'mcq';
+
+function renderQuizModes(){
+  const t = UI[lang];
+  const labels = { mcq:t.modeMcq, flash:t.modeFlash, tf:t.modeTf, match:t.modeMatch };
+  document.getElementById('quizModes').innerHTML = Object.keys(labels).map(m => `
+    <button class="tab${m === quizMode ? ' active' : ''}" data-mode="${m}">${labels[m]}</button>
+  `).join('');
+  document.querySelectorAll('#quizModes button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      quizMode = btn.dataset.mode;
+      renderQuizModes();
+      renderQuizMode();
+    });
+  });
+}
+
+function renderQuizMode(){
+  const container = document.getElementById('quizModeContent');
+  if(quizMode === 'mcq'){
+    container.innerHTML = `<div class="quiz-diff" id="quizDiff"></div><div class="quiz-score" id="quizScore"></div><div class="quiz-box" id="quizBox"></div>`;
+    newQuestion();
+  } else if(quizMode === 'flash'){
+    renderFlashMode(container);
+  } else if(quizMode === 'tf'){
+    renderTfMode(container);
+  } else if(quizMode === 'match'){
+    renderMatchMode(container);
+  }
+}
+
+function renderQuizDiff(){
+  const t = UI[lang];
+  const labels = { easy: t.diffEasy, medium: t.diffMedium, hard: t.diffHard };
+  document.getElementById('quizDiff').innerHTML = Object.keys(labels).map(d => `
+    <button class="${d}${d === quizDifficulty ? ' active' : ''}" data-diff="${d}">${labels[d]}</button>
+  `).join('');
+  document.querySelectorAll('#quizDiff button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      quizDifficulty = btn.dataset.diff;
+      quizScore = { correct:0, total:0 };
+      newQuestion();
+    });
+  });
+  document.getElementById('quizScore').textContent = t.quizScoreLabel(quizScore.correct, quizScore.total);
+}
+
+function newQuestion(){
+  const gen = pickRandom(QUESTION_POOLS[quizDifficulty]);
+  quizCurrentQ = gen();
+  renderQuiz();
+  renderQuizDiff();
+}
+
+function renderQuiz(){
+  const t = UI[lang];
+  if(!quizCurrentQ) quizCurrentQ = pickRandom(QUESTION_POOLS[quizDifficulty])();
+  const q = quizCurrentQ;
+  const box = document.getElementById('quizBox');
+  const displayHtml = q.display
+    ? (q.displayIsText ? `<div class="quiz-display-text">${q.display}</div>` : `<div class="quiz-ar">${q.display}</div>`)
+    : '';
+  box.innerHTML = `
+    ${displayHtml}
+    <div class="quiz-prompt">${q.prompt}</div>
+    <div class="quiz-options">
+      ${q.options.map((opt, i) => `<button class="quiz-opt" data-idx="${i}">${opt}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+  `;
+  box.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      box.querySelectorAll('.quiz-opt').forEach(b=>b.disabled = true);
+      const guess = parseInt(btn.dataset.idx, 10);
+      quizScore.total++;
+      if(guess === q.correctIndex){
+        quizScore.correct++;
+        lifetimeStats.quizCorrect = (lifetimeStats.quizCorrect || 0) + 1;
+        persistLifetimeStats();
+        btn.classList.add('correct');
+        document.getElementById('quizFeedback').innerHTML = `<strong>${t.quizCorrect}</strong> ${q.explanation} <button class="quiz-next" id="quizNextBtn">${t.quizNext}</button>`;
+      } else {
+        btn.classList.add('wrong');
+        box.querySelector(`.quiz-opt[data-idx="${q.correctIndex}"]`).classList.add('correct');
+        document.getElementById('quizFeedback').innerHTML = `${t.quizWrong} ${q.explanation} <button class="quiz-next" id="quizNextBtn">${t.quizNext}</button>`;
+      }
+      document.getElementById('quizScore').textContent = t.quizScoreLabel(quizScore.correct, quizScore.total);
+      document.getElementById('quizNextBtn').addEventListener('click', newQuestion);
+    });
+  });
+}
+
+// ---- Mode Cartes mémo (flashcards) ----
+const FLASHCARD_ITEMS = [];
+FLAT_LETTERS.forEach(item=>{
+  FLASHCARD_ITEMS.push({
+    fr:{front:item.l.ar, frontIsAr:true, back:`${item.l.fr.name} — ${item.l.fr.desc}. ${item.l.fr.tip}`},
+    tr:{front:item.l.ar, frontIsAr:true, back:`${item.l.tr.name} — ${item.l.tr.desc}. ${item.l.tr.tip}`}
+  });
+});
+SIFAT.forEach(s=>{
+  FLASHCARD_ITEMS.push({
+    fr:{front:s.fr.name, frontIsAr:false, back:s.fr.desc},
+    tr:{front:s.tr.name, frontIsAr:false, back:s.tr.desc}
+  });
+});
+FLAT_RULES.forEach(r=>{
+  FLASHCARD_ITEMS.push({
+    fr:{front:r.it.fr.name, frontIsAr:false, back:`${r.it.fr.desc} (${r.cat.fr})`},
+    tr:{front:r.it.tr.name, frontIsAr:false, back:`${r.it.tr.desc} (${r.cat.tr})`}
+  });
+});
+
+let flashDeck = [];
+let flashIdx = 0;
+let flashRevealed = false;
+let flashStats = { know: 0, review: 0 };
+
+function buildFlashDeck(){
+  flashDeck = shuffle(FLASHCARD_ITEMS);
+  flashIdx = 0;
+  flashRevealed = false;
+  flashStats = { know: 0, review: 0 };
+}
+
+function renderFlashMode(container){
+  const t = UI[lang];
+  if(flashDeck.length === 0) buildFlashDeck();
+
+  if(flashIdx >= flashDeck.length){
+    container.innerHTML = `
+      <div class="flash-progress">${t.flashProgress(flashDeck.length, flashDeck.length, flashStats.know, flashStats.review)}</div>
+      <div class="flash-card"><div class="flash-back" style="display:block;">${t.flashDone}</div></div>
+      <div class="flash-actions"><button class="flash-btn reveal" id="flashRestart">${t.flashRestart}</button></div>
+    `;
+    document.getElementById('flashRestart').addEventListener('click', ()=>{ buildFlashDeck(); renderFlashMode(container); });
+    return;
+  }
+
+  const item = flashDeck[flashIdx][lang];
+  container.innerHTML = `
+    <div class="flash-progress">${t.flashProgress(flashIdx + 1, flashDeck.length, flashStats.know, flashStats.review)}</div>
+    <div class="flash-card${flashRevealed ? ' revealed' : ''}" id="flashCard">
+      <div class="flash-front" style="${item.frontIsAr ? '' : 'font-family:\'Fraunces\',serif;font-size:22px;'}">${item.front}</div>
+      <div class="flash-back">${item.back}</div>
+    </div>
+    <div class="flash-actions">
+      ${flashRevealed
+        ? `<button class="flash-btn review" id="flashReviewBtn">${t.flashReview}</button><button class="flash-btn know" id="flashKnowBtn">${t.flashKnow}</button>`
+        : `<button class="flash-btn reveal" id="flashRevealBtn">${t.flashReveal}</button>`}
+    </div>
+  `;
+  document.getElementById('flashCard').addEventListener('click', ()=>{
+    if(!flashRevealed){ flashRevealed = true; renderFlashMode(container); }
+  });
+  if(!flashRevealed){
+    document.getElementById('flashRevealBtn').addEventListener('click', ()=>{ flashRevealed = true; renderFlashMode(container); });
+  } else {
+    document.getElementById('flashKnowBtn').addEventListener('click', ()=>{
+      flashStats.know++; lifetimeStats.quizCorrect = (lifetimeStats.quizCorrect || 0) + 1; persistLifetimeStats(); flashIdx++; flashRevealed = false; renderFlashMode(container);
+    });
+    document.getElementById('flashReviewBtn').addEventListener('click', ()=>{
+      flashStats.review++; flashDeck.push(flashDeck[flashIdx]); flashIdx++; flashRevealed = false; renderFlashMode(container);
+    });
+  }
+}
+
+// ---- Mode Vrai / Faux ----
+let tfCurrent = null;
+let tfScore = { correct: 0, total: 0 };
+
+function genTrueFalse(){
+  const item = pickRandom(FLAT_LETTERS);
+  const isTrue = Math.random() < 0.5;
+  const descItem = isTrue ? item : pickRandom(FLAT_LETTERS.filter(x => x !== item));
+  return { item, descItem, isTrue };
+}
+
+function renderTfMode(container){
+  const t = UI[lang];
+  if(!tfCurrent) tfCurrent = genTrueFalse();
+  const { item, descItem, isTrue } = tfCurrent;
+  const statement = `${item.l.ar} — ${item.l[lang].name} : ${descItem.l[lang].desc}`;
+  container.innerHTML = `
+    <div class="quiz-score">${UI[lang].quizScoreLabel(tfScore.correct, tfScore.total)}</div>
+    <div class="tf-box">
+      <div class="tf-statement">${statement}</div>
+      <div class="tf-options">
+        <button class="tf-opt" data-guess="true">${t.tfCorrect}</button>
+        <button class="tf-opt" data-guess="false">${t.tfWrong}</button>
+      </div>
+      <div class="quiz-feedback" id="tfFeedback"></div>
+    </div>
+  `;
+  container.querySelectorAll('.tf-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      container.querySelectorAll('.tf-opt').forEach(b=>b.disabled = true);
+      const guess = btn.dataset.guess === 'true';
+      tfScore.total++;
+      const rightBtn = container.querySelector(`.tf-opt[data-guess="${isTrue}"]`);
+      if(guess === isTrue){
+        tfScore.correct++;
+        lifetimeStats.quizCorrect = (lifetimeStats.quizCorrect || 0) + 1;
+        persistLifetimeStats();
+        btn.classList.add('correct');
+        document.getElementById('tfFeedback').innerHTML = `<strong>${t.tfFeedbackCorrect}</strong> ${item.l[lang].desc} <button class="quiz-next" id="tfNextBtn">${t.tfNext}</button>`;
+      } else {
+        btn.classList.add('wrong');
+        rightBtn.classList.add('correct');
+        document.getElementById('tfFeedback').innerHTML = `${t.tfFeedbackWrong} ${item.l[lang].name} — ${item.l[lang].desc}. <button class="quiz-next" id="tfNextBtn">${t.tfNext}</button>`;
+      }
+      document.getElementById('tfNextBtn').addEventListener('click', ()=>{
+        tfCurrent = genTrueFalse();
+        renderTfMode(container);
+      });
+    });
+  });
+}
+
+// ---- Mode Association (matching game) ----
+let matchCards = [];
+let matchSelected = [];
+
+function buildMatchRound(){
+  const items = shuffle(FLAT_LETTERS).slice(0, 4);
+  matchCards = [];
+  items.forEach((it, i)=>{
+    matchCards.push({ id:'ar'+i, pairId:i, value: it.l.ar, isAr:true, matched:false });
+    matchCards.push({ id:'nm'+i, pairId:i, value: it.l[lang].name, isAr:false, matched:false });
+  });
+  matchCards = shuffle(matchCards);
+  matchSelected = [];
+}
+
+function renderMatchMode(container){
+  const t = UI[lang];
+  if(matchCards.length === 0) buildMatchRound();
+  const allMatched = matchCards.every(c=>c.matched);
+  container.innerHTML = `
+    <p class="sub" style="margin-bottom:14px;">${t.matchInstructions}</p>
+    <div class="match-grid">
+      ${matchCards.map(c => `
+        <button class="match-card${c.matched ? ' matched' : ''}${matchSelected.includes(c.id) ? ' selected' : ''}"
+                data-id="${c.id}" ${c.matched ? 'disabled' : ''}
+                style="${c.isAr ? '' : 'font-family:\'Source Sans 3\',sans-serif;font-size:12px;font-weight:600;'}">${c.value}</button>
+      `).join('')}
+    </div>
+    ${allMatched ? `<div style="text-align:center;"><button class="quiz-next" id="matchNewBtn">${t.matchNew}</button></div>` : ''}
+  `;
+  container.querySelectorAll('.match-card').forEach(btn=>{
+    btn.addEventListener('click', ()=> handleMatchClick(btn.dataset.id, container));
+  });
+  if(allMatched){
+    document.getElementById('matchNewBtn').addEventListener('click', ()=>{ matchCards = []; renderMatchMode(container); });
+  }
+}
+
+function handleMatchClick(id, container){
+  if(matchSelected.includes(id)) return;
+  const card = matchCards.find(c => c.id === id);
+  if(card.matched) return;
+  matchSelected.push(id);
+  if(matchSelected.length === 2){
+    const [id1, id2] = matchSelected;
+    const c1 = matchCards.find(c => c.id === id1);
+    const c2 = matchCards.find(c => c.id === id2);
+    if(c1.pairId === c2.pairId && c1.isAr !== c2.isAr){
+      c1.matched = true; c2.matched = true;
+      matchSelected = [];
+      renderMatchMode(container);
+      if(matchCards.every(c=>c.matched)){
+        lifetimeStats.matchRounds = (lifetimeStats.matchRounds || 0) + 1;
+        persistLifetimeStats();
+        renderBadges();
+      }
+    } else {
+      renderMatchMode(container);
+      setTimeout(()=>{ matchSelected = []; renderMatchMode(container); }, 700);
+    }
+  } else {
+    renderMatchMode(container);
+  }
+}
+
+// ---- Métronome des madd ----
+let metroInterval = null;
+let metroBeat = 0;
+let metroTotal = 4;
+let audioCtx = null;
+
+function beep(strong){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.frequency.value = strong ? 880 : 600;
+  gain.gain.value = 0.15;
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start();
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.12);
+  osc.stop(audioCtx.currentTime + 0.13);
+}
+
+function renderMetroDots(){
+  document.getElementById('metroDots').innerHTML = Array.from({length: metroTotal}).map((_, i) => `
+    <span class="metro-dot${i === metroBeat ? ' active' : ''}"></span>
+  `).join('');
+  document.getElementById('metroCount').textContent = metroBeat + 1;
+}
+
+function renderMetroLengths(){
+  const opts = [2, 4, 6];
+  document.getElementById('metroLengths').innerHTML = opts.map(n => `
+    <button class="${n === metroTotal ? 'active' : ''}" data-len="${n}">${n}</button>
+  `).join('');
+  document.querySelectorAll('#metroLengths button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      metroTotal = parseInt(btn.dataset.len, 10);
+      metroBeat = 0;
+      renderMetroLengths();
+      renderMetroDots();
+    });
+  });
+}
+
+function toggleMetronome(){
+  const t = UI[lang];
+  const btn = document.getElementById('metroToggle');
+  if(metroInterval){
+    clearInterval(metroInterval);
+    metroInterval = null;
+    btn.textContent = t.metroStart;
+    btn.classList.remove('stop');
+  } else {
+    metroBeat = -1;
+    metroInterval = setInterval(()=>{
+      metroBeat = (metroBeat + 1) % metroTotal;
+      beep(metroBeat === 0);
+      renderMetroDots();
+    }, 700);
+    btn.textContent = t.metroStop;
+    btn.classList.add('stop');
+  }
+}
+
+// ---- Coran (texte chargé en direct depuis une API publique, jamais recopié à la main) ----
+let surahList = null;
+const SURAH_NAMES_FR = ['Al-Fatiha','Al-Baqara','Ali Imran',"An-Nisa","Al-Ma'ida","Al-An'am","Al-A'raf",'Al-Anfal','At-Tawba','Yunus','Hud','Yusuf',"Ar-Ra'd",'Ibrahim','Al-Hijr','An-Nahl','Al-Isra','Al-Kahf','Maryam','Ta-Ha','Al-Anbiya','Al-Hajj','Al-Muminun','An-Nur','Al-Furqan',"Ash-Shu'ara",'An-Naml','Al-Qasas','Al-Ankabut','Ar-Rum','Luqman','As-Sajda','Al-Ahzab','Saba','Fatir','Ya-Sin','As-Saffat','Sad','Az-Zumar','Ghafir','Fussilat','Ash-Shura','Az-Zukhruf','Ad-Dukhan','Al-Jathiya','Al-Ahqaf','Muhammad','Al-Fath','Al-Hujurat','Qaf','Adh-Dhariyat','At-Tur','An-Najm','Al-Qamar','Ar-Rahman',"Al-Waqi'a",'Al-Hadid','Al-Mujadala','Al-Hashr','Al-Mumtahana','As-Saff',"Al-Jumu'a",'Al-Munafiqun','At-Taghabun','At-Talaq','At-Tahrim','Al-Mulk','Al-Qalam','Al-Haqqa',"Al-Ma'arij",'Nuh','Al-Jinn','Al-Muzzammil','Al-Muddaththir','Al-Qiyama','Al-Insan','Al-Mursalat',"An-Naba'","An-Nazi'at",'Abasa','At-Takwir','Al-Infitar','Al-Mutaffifin','Al-Inshiqaq','Al-Buruj','At-Tariq',"Al-A'la",'Al-Ghashiya','Al-Fajr','Al-Balad','Ash-Shams','Al-Layl','Ad-Duha','Ash-Sharh','At-Tin','Al-Alaq','Al-Qadr','Al-Bayyina','Az-Zalzala','Al-Adiyat',"Al-Qari'a",'At-Takathur','Al-Asr','Al-Humaza','Al-Fil','Quraysh',"Al-Ma'un",'Al-Kawthar','Al-Kafirun','An-Nasr','Al-Masad','Al-Ikhlas','Al-Falaq','An-Nas'];
+const SURAH_NAMES_TR = ['Fatiha','Bakara','Al-i İmran','Nisa','Maide',"En'am","A'raf",'Enfal','Tevbe','Yunus','Hud','Yusuf',"Ra'd",'İbrahim','Hicr','Nahl','İsra','Kehf','Meryem','Taha','Enbiya','Hac',"Mü'minun",'Nur','Furkan','Şuara','Neml','Kasas','Ankebut','Rum','Lokman','Secde','Ahzab','Sebe','Fatır','Yasin','Saffat','Sad','Zümer',"Mü'min",'Fussilet','Şura','Zuhruf','Duhan','Casiye','Ahkaf','Muhammed','Fetih','Hucurat','Kaf','Zariyat','Tur','Necm','Kamer','Rahman','Vakıa','Hadid','Mücadele','Haşr','Mümtehine','Saff','Cuma','Münafikun','Tegabün','Talak','Tahrim','Mülk','Kalem','Hakka','Mearic','Nuh','Cin','Müzzemmil','Müddessir','Kıyame','İnsan','Mürselat','Nebe','Naziat','Abese','Tekvir','İnfitar','Mutaffifin','İnşikak','Büruc','Tarık',"A'la",'Gaşiye','Fecr','Beled','Şems','Leyl','Duha','İnşirah','Tin','Alak','Kadir','Beyyine','Zilzal','Adiyat','Karia','Tekasür','Asr','Hümeze','Fil','Kureyş','Maun','Kevser','Kafirun','Nasr','Tebbet','İhlas','Felak','Nas'];
+function localSurahName(num){
+  const arr = lang === 'tr' ? SURAH_NAMES_TR : SURAH_NAMES_FR;
+  return arr[num - 1] || '';
+}
+let showTranslation = false;
+let trEditionCache = null;
+
+async function getCachedQuran(key){
+  try{
+    const result = await window.storage.get(key, false);
+    return result && result.value ? JSON.parse(result.value) : null;
+  }catch(e){ return null; }
+}
+async function setCachedQuran(key, value){
+  try{ await window.storage.set(key, JSON.stringify(value), false); }catch(e){}
+}
+
+async function resolveTrEdition(){
+  if(trEditionCache) return trEditionCache;
+  try{
+    const res = await fetch('https://api.alquran.cloud/v1/edition/language/tr');
+    const data = await res.json();
+    const editions = data.data || [];
+    const translations = editions.filter(e => e.type === 'translation');
+    const yazir = translations.find(e =>
+      /yazir/i.test(e.identifier) ||
+      /yaz[iı]r/i.test(e.name || '') ||
+      /yaz[iı]r/i.test(e.englishName || '')
+    );
+    const pick = yazir || translations[0] || editions[0];
+    trEditionCache = pick ? pick.identifier : 'tr.diyanet';
+  }catch(e){
+    trEditionCache = 'tr.diyanet';
+  }
+  return trEditionCache;
+}
+
+async function getOfflineSurahSet(){
+  try{
+    const result = await window.storage.list('quran-simple-', false);
+    const keys = (result && result.keys) || [];
+    return new Set(keys.map(k => parseInt(k.replace('quran-simple-',''), 10)));
+  }catch(e){ return new Set(); }
+}
+
+let quranQuery = '';
+let quranShowFavOnly = false;
+
+async function getFavSurahSet(){
+  try{
+    const result = await window.storage.list('quran-fav-', false);
+    const keys = (result && result.keys) || [];
+    return new Set(keys.map(k => parseInt(k.replace('quran-fav-',''), 10)));
+  }catch(e){ return new Set(); }
+}
+
+async function toggleFavSurah(num){
+  const key = 'quran-fav-' + num;
+  try{
+    const existing = await window.storage.get(key, false).catch(()=>null);
+    if(existing){ await window.storage.delete(key, false); }
+    else{ await window.storage.set(key, '1', false); }
+  }catch(e){}
+}
+
+const STATUS_CYCLE = ['none','progress','memorized'];
+const STATUS_ICON = { none:'', progress:'◐', memorized:'●' };
+
+async function getSurahStatus(num){
+  try{
+    const r = await window.storage.get('quran-status-' + num, false);
+    return (r && r.value) || 'none';
+  }catch(e){ return 'none'; }
+}
+async function setSurahStatus(num, status){
+  try{
+    if(status === 'none'){ await window.storage.delete('quran-status-' + num, false); }
+    else{ await window.storage.set('quran-status-' + num, status, false); }
+  }catch(e){}
+}
+async function cycleSurahStatus(num){
+  const current = await getSurahStatus(num);
+  const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(current) + 1) % STATUS_CYCLE.length];
+  await setSurahStatus(num, next);
+  return next;
+}
+async function getAllStatuses(){
+  const map = {};
+  try{
+    const result = await window.storage.list('quran-status-', false);
+    const keys = (result && result.keys) || [];
+    for(const k of keys){
+      const num = parseInt(k.replace('quran-status-',''), 10);
+      const r = await window.storage.get(k, false).catch(()=>null);
+      if(r) map[num] = r.value;
+    }
+  }catch(e){}
+  return map;
+}
+
+async function setLastRead(num){
+  try{ await window.storage.set('quran-last-read', String(num), false); }catch(e){}
+}
+async function getLastRead(){
+  try{
+    const r = await window.storage.get('quran-last-read', false);
+    return r ? parseInt(r.value, 10) : null;
+  }catch(e){ return null; }
+}
+
+async function bumpRevisionCount(num){
+  const key = 'quran-revcount-' + num;
+  try{
+    const r = await window.storage.get(key, false).catch(()=>null);
+    const count = (r ? parseInt(r.value, 10) : 0) + 1;
+    await window.storage.set(key, String(count), false);
+    return count;
+  }catch(e){ return 0; }
+}
+async function getRevisionCount(num){
+  try{
+    const r = await window.storage.get('quran-revcount-' + num, false);
+    return r ? parseInt(r.value, 10) : 0;
+  }catch(e){ return 0; }
+}
+
+async function getSurahNote(num){
+  try{
+    const r = await window.storage.get('quran-note-' + num, false);
+    return (r && r.value) || '';
+  }catch(e){ return ''; }
+}
+async function setSurahNote(num, text){
+  try{
+    if(!text){ await window.storage.delete('quran-note-' + num, false); }
+    else{ await window.storage.set('quran-note-' + num, text, false); }
+  }catch(e){}
+}
+
+async function getFontSizePref(){
+  try{
+    const r = await window.storage.get('quran-font-size', false);
+    return r ? parseInt(r.value, 10) : 28;
+  }catch(e){ return 28; }
+}
+async function setFontSizePref(size){
+  try{ await window.storage.set('quran-font-size', String(size), false); }catch(e){}
+}
+
+function matchesQuranQuery(s, query){
+  if(!query) return true;
+  const q = query.trim().toLowerCase();
+  if(!q) return true;
+  if(String(s.number) === q) return true;
+  const fields = [s.name, s.englishName, localSurahName(s.number)];
+  return fields.some(f => (f || '').toLowerCase().includes(q));
+}
+
+async function loadSurahList(){
+  const t = UI[lang];
+  if(surahList){ renderSurahList(); return; }
+  const container = document.getElementById('quranContent');
+  container.innerHTML = `<p class="sub">${t.quranLoading}</p>`;
+
+  const cached = await getCachedQuran('quran-surah-list');
+  if(cached){
+    surahList = cached;
+    await renderSurahList();
+  }
+
+  try{
+    const res = await fetch('https://api.alquran.cloud/v1/surah');
+    const data = await res.json();
+    surahList = data.data;
+    await setCachedQuran('quran-surah-list', surahList);
+    await renderSurahList();
+  }catch(e){
+    if(!cached) container.innerHTML = `<p class="rec-error">${t.quranError}</p>`;
+  }
+}
+
+async function renderSurahList(){
+  const t = UI[lang];
+  const container = document.getElementById('quranContent');
+  const lastRead = await getLastRead();
+  const lastReadSurah = lastRead ? surahList.find(s => s.number === lastRead) : null;
+  container.innerHTML = `
+    ${lastReadSurah ? `
+      <div class="quran-resume-banner">
+        <span>${t.quranResumeLabel} : <strong>${lastReadSurah.name}</strong> (${localSurahName(lastReadSurah.number)})</span>
+        <button id="quranResumeBtn">${t.quranResume}</button>
+      </div>
+    ` : ''}
+    <div class="quran-toolbar">
+      <input type="text" class="quran-search-input" id="quranSearchInput"
+             placeholder="${t.quranSearch}" value="${quranQuery.replace(/"/g,'&quot;')}">
+      <button class="quran-fav-toggle${quranShowFavOnly ? ' active' : ''}" id="quranFavToggle">
+        ${quranShowFavOnly ? t.quranFavAll : t.quranFavOnly}
+      </button>
+    </div>
+    <div id="surahGrid"></div>
+  `;
+  document.getElementById('quranSearchInput').addEventListener('input', (e)=>{
+    quranQuery = e.target.value;
+    renderSurahGrid();
+  });
+  document.getElementById('quranFavToggle').addEventListener('click', (e)=>{
+    quranShowFavOnly = !quranShowFavOnly;
+    e.target.classList.toggle('active', quranShowFavOnly);
+    renderSurahGrid();
+  });
+  const resumeBtn = document.getElementById('quranResumeBtn');
+  if(resumeBtn) resumeBtn.addEventListener('click', ()=> loadSurah(lastRead));
+  await renderSurahGrid();
+}
+
+async function renderSurahGrid(){
+  const t = UI[lang];
+  const offlineSet = await getOfflineSurahSet();
+  const favSet = await getFavSurahSet();
+  const statusMap = await getAllStatuses();
+  const grid = document.getElementById('surahGrid');
+  if(!grid) return;
+
+  let list = surahList.filter(s => matchesQuranQuery(s, quranQuery));
+  if(quranShowFavOnly) list = list.filter(s => favSet.has(s.number));
+
+  if(list.length === 0){
+    grid.innerHTML = `<p class="sub">${t.quranNoResult}</p>`;
+    return;
+  }
+
+  const statusLabel = { none:'', progress:t.quranStatusProgress, memorized:t.quranStatusMemorized };
+
+  grid.innerHTML = `
+    <div class="surah-grid">
+      ${list.map(s => {
+        const status = statusMap[s.number] || 'none';
+        return `
+        <div class="surah-item" data-num="${s.number}" role="button" tabindex="0">
+          <button class="surah-fav-btn${favSet.has(s.number) ? ' is-fav' : ''}" data-fav-num="${s.number}" title="⭐">
+            ${favSet.has(s.number) ? '★' : '☆'}
+          </button>
+          ${offlineSet.has(s.number) ? `<span class="surah-offline-badge" title="${t.quranOffline}">✓</span>` : ''}
+          <span class="surah-num">${s.number} · ${s.numberOfAyahs} ${lang === 'fr' ? 'versets' : 'ayet'}</span>
+          <span class="surah-ar">${s.name}</span>
+          <span class="surah-en">${localSurahName(s.number)}</span>
+          <button class="surah-status-btn" data-status-num="${s.number}" title="${statusLabel[status] || t.quranStatusNone}">
+            ${STATUS_ICON[status]}
+          </button>
+        </div>
+      `;
+      }).join('')}
+    </div>
+  `;
+  grid.querySelectorAll('.surah-item').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      if(e.target.closest('.surah-fav-btn') || e.target.closest('.surah-status-btn')) return;
+      loadSurah(parseInt(btn.dataset.num, 10));
+    });
+    btn.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        loadSurah(parseInt(btn.dataset.num, 10));
+      }
+    });
+  });
+  grid.querySelectorAll('.surah-fav-btn').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      await toggleFavSurah(parseInt(btn.dataset.favNum, 10));
+      renderSurahGrid();
+    });
+  });
+  grid.querySelectorAll('.surah-status-btn').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      await cycleSurahStatus(parseInt(btn.dataset.statusNum, 10));
+      renderSurahGrid();
+    });
+  });
+}
+
+let currentOpenSurah = null;
+let quranFontSize = 28;
+
+async function searchQuranText(query){
+  const q = query.trim();
+  if(!q) return [];
+  const offlineSet = await getOfflineSurahSet();
+  const results = [];
+  for(const num of offlineSet){
+    const s = await getCachedQuran('quran-simple-' + num);
+    if(!s || !s.ayahs) continue;
+    s.ayahs.forEach(a => {
+      if(a.text.includes(q)){
+        results.push({ num, ayahNum: a.numberInSurah, text: a.text, surahName: s.name });
+      }
+    });
+  }
+  return results;
+}
+
+async function loadSurah(num){
+  const t = UI[lang];
+  const container = document.getElementById('quranContent');
+  container.innerHTML = `<p class="sub">${t.quranLoading}</p>`;
+
+  const arKey = `quran-simple-${num}`;
+  let s = await getCachedQuran(arKey);
+  let fromCache = !!s;
+
+  try{
+    if(!s){
+      const arRes = await fetch(`https://api.alquran.cloud/v1/surah/${num}/quran-simple`);
+      const arData = await arRes.json();
+      s = arData.data;
+      await setCachedQuran(arKey, s);
+    }
+
+    let transAyahs = null;
+    if(showTranslation){
+      const transEdition = lang === 'fr' ? 'fr.hamidullah' : await resolveTrEdition();
+      const trKey = `quran-tr-${lang}-${num}`;
+      transAyahs = await getCachedQuran(trKey);
+      if(!transAyahs){
+        const trRes = await fetch(`https://api.alquran.cloud/v1/surah/${num}/${transEdition}`);
+        const trData = await trRes.json();
+        transAyahs = trData.data.ayahs;
+        await setCachedQuran(trKey, transAyahs);
+      }
+    }
+
+    if(currentOpenSurah !== num){
+      currentOpenSurah = num;
+      await setLastRead(num);
+      await bumpRevisionCount(num);
+    }
+    quranFontSize = await getFontSizePref();
+    const revCount = await getRevisionCount(num);
+    const note = await getSurahNote(num);
+
+    container.innerHTML = `
+      <button class="quiz-next" id="backToList">${t.quranBack}</button>
+      ${fromCache ? `<p class="tool-note">${t.quranOffline}</p>` : ''}
+      <div class="surah-header">
+        <div class="surah-header-ar">${s.name}</div>
+        <div class="surah-header-en">${localSurahName(s.number)}</div>
+        <p class="quran-rev-count">${revCount} ${t.quranRevCount}</p>
+      </div>
+      <div class="quran-font-controls">
+        <button id="fontSmaller">${t.quranFontSmaller}</button>
+        <button id="fontBigger">${t.quranFontBigger}</button>
+      </div>
+      <label class="surah-toggle"><input type="checkbox" id="transToggle" ${showTranslation ? 'checked' : ''}> ${t.quranShowTrans}</label>
+
+      <button class="quran-text-search-toggle" id="quranTextSearchToggleBtn">${t.quranTextSearchToggle}</button>
+      <div class="quran-text-search-box" id="quranTextSearchBox" style="display:none;">
+        <input type="text" id="quranTextSearchInput" placeholder="${t.quranTextSearchPlaceholder}">
+        <p class="quran-text-search-note">${t.quranTextSearchNote}</p>
+        <div class="quran-text-search-results" id="quranTextSearchResults"></div>
+      </div>
+
+      <div class="ayah-list" id="ayahList" style="font-size:${quranFontSize}px;">
+        ${s.ayahs.map((a, i) => `
+          <div class="ayah-item">
+            <div class="ayah-num">${a.numberInSurah}</div>
+            <div class="ayah-ar">${a.text}</div>
+            ${transAyahs ? `<div class="ayah-tr">${transAyahs[i].text}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="quran-note-box">
+        <label for="quranNoteInput">${t.quranNoteLabel}</label>
+        <textarea id="quranNoteInput" placeholder="${t.quranNotePlaceholder}">${note}</textarea>
+        <p class="quran-note-saved" id="quranNoteSaved">${t.quranNoteSaved} ✓</p>
+      </div>
+    `;
+    document.getElementById('backToList').addEventListener('click', ()=>{ currentOpenSurah = null; renderSurahList(); });
+    document.getElementById('transToggle').addEventListener('change', (e)=>{
+      showTranslation = e.target.checked;
+      loadSurah(num);
+    });
+    document.getElementById('fontSmaller').addEventListener('click', async ()=>{
+      quranFontSize = Math.max(16, quranFontSize - 2);
+      await setFontSizePref(quranFontSize);
+      document.getElementById('ayahList').style.fontSize = quranFontSize + 'px';
+    });
+    document.getElementById('fontBigger').addEventListener('click', async ()=>{
+      quranFontSize = Math.min(48, quranFontSize + 2);
+      await setFontSizePref(quranFontSize);
+      document.getElementById('ayahList').style.fontSize = quranFontSize + 'px';
+    });
+
+    let noteTimer = null;
+    document.getElementById('quranNoteInput').addEventListener('input', (e)=>{
+      clearTimeout(noteTimer);
+      noteTimer = setTimeout(async ()=>{
+        await setSurahNote(num, e.target.value);
+        const saved = document.getElementById('quranNoteSaved');
+        saved.classList.add('show');
+        setTimeout(()=> saved.classList.remove('show'), 1500);
+      }, 500);
+    });
+
+    const searchToggleBtn = document.getElementById('quranTextSearchToggleBtn');
+    const searchBox = document.getElementById('quranTextSearchBox');
+    searchToggleBtn.addEventListener('click', ()=>{
+      searchBox.style.display = searchBox.style.display === 'none' ? 'block' : 'none';
+    });
+    let textSearchTimer = null;
+    document.getElementById('quranTextSearchInput').addEventListener('input', (e)=>{
+      clearTimeout(textSearchTimer);
+      const q = e.target.value;
+      textSearchTimer = setTimeout(async ()=>{
+        const resultsEl = document.getElementById('quranTextSearchResults');
+        if(!q.trim()){ resultsEl.innerHTML = ''; return; }
+        const results = await searchQuranText(q);
+        if(results.length === 0){
+          resultsEl.innerHTML = `<p class="sub">${t.quranTextSearchNoResult}</p>`;
+          return;
+        }
+        resultsEl.innerHTML = results.slice(0, 50).map(r => `
+          <div class="quran-text-search-result" data-num="${r.num}">
+            <div class="qtsr-title">${r.surahName} — ${r.ayahNum}</div>
+            <div class="qtsr-ar">${r.text}</div>
+          </div>
+        `).join('');
+        resultsEl.querySelectorAll('.quran-text-search-result').forEach(el=>{
+          el.addEventListener('click', ()=> loadSurah(parseInt(el.dataset.num, 10)));
+        });
+      }, 400);
+    });
+  }catch(e){
+    container.innerHTML = `
+      <button class="quiz-next" id="backToList">${t.quranBack}</button>
+      <p class="rec-error">${t.quranError}</p>
+    `;
+    document.getElementById('backToList').addEventListener('click', ()=>{ currentOpenSurah = null; renderSurahList(); });
+  }
+}
+
+function renderTools(){
+  const t = UI[lang];
+  renderMetroLengths();
+  renderMetroDots();
+  const btn = document.getElementById('metroToggle');
+  btn.textContent = t.metroStart;
+  btn.classList.remove('stop');
+  btn.onclick = toggleMetronome;
+  renderRecorder();
+}
+
+// ---- Enregistrement audio (comparaison de sa propre voix) ----
+let mediaRecorder = null;
+let recChunks = [];
+let isRecording = false;
+
+function renderRecorder(){
+  const t = UI[lang];
+  const controls = document.getElementById('recControls');
+  controls.innerHTML = `<button class="record" id="recBtn">${isRecording ? t.recStop : t.recStart}</button>`;
+  document.getElementById('recBtn').addEventListener('click', toggleRecording);
+}
+
+async function toggleRecording(){
+  const t = UI[lang];
+  if(isRecording){
+    mediaRecorder.stop();
+    isRecording = false;
+    renderRecorder();
+    return;
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = (e) => recChunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recChunks, { type: 'audio/webm' });
+      const url = URL.createObjectURL(blob);
+      document.getElementById('recPlayback').innerHTML = `<audio controls src="${url}"></audio>`;
+      stream.getTracks().forEach(track => track.stop());
+    };
+    mediaRecorder.start();
+    isRecording = true;
+    renderRecorder();
+  }catch(e){
+    document.getElementById('recPlayback').innerHTML = `<div class="rec-error">${t.recDenied}</div>`;
+  }
+}
+
+// ---- Streak, historique et badges ----
+const STREAK_KEY = 'mahrec-streak-v1';
+const HISTORY_KEY = 'mahrec-history-v1';
+const STATS_KEY = 'mahrec-lifetime-stats-v1';
+let streak = { current: 0, longest: 0, lastDate: null };
+let history = [];
+let lifetimeStats = { quizCorrect: 0, matchRounds: 0 };
+
+function todayStr(){ return new Date().toISOString().slice(0, 10); }
+function daysBetween(a, b){ return Math.round((new Date(b) - new Date(a)) / 86400000); }
+
+async function loadStreak(){
+  try{
+    const result = await window.storage.get(STREAK_KEY, false);
+    if(result && result.value) streak = JSON.parse(result.value);
+  }catch(e){ streak = { current:0, longest:0, lastDate:null }; }
+
+  const today = todayStr();
+  if(streak.lastDate !== today){
+    const diff = streak.lastDate ? daysBetween(streak.lastDate, today) : null;
+    if(diff === 1) streak.current += 1;
+    else if(diff === null || diff > 1) streak.current = 1;
+    // diff === 0 already excluded by the outer check
+    streak.longest = Math.max(streak.longest || 0, streak.current);
+    streak.lastDate = today;
+    try{ await window.storage.set(STREAK_KEY, JSON.stringify(streak), false); }catch(e){}
+  }
+}
+
+async function loadHistory(){
+  try{
+    const result = await window.storage.get(HISTORY_KEY, false);
+    if(result && result.value) history = JSON.parse(result.value);
+  }catch(e){ history = []; }
+}
+
+async function recordTodaySnapshot(){
+  const total = Object.values(LETTERS).flat().filter((_, i) => true).length;
+  let doneCount = 0;
+  Object.values(state).forEach(e => { if(e && e.done) doneCount++; });
+  const today = todayStr();
+  const last = history[history.length - 1];
+  if(last && last.date === today){
+    last.count = doneCount;
+  } else {
+    history.push({ date: today, count: doneCount });
+  }
+  if(history.length > 60) history = history.slice(-60);
+  try{ await window.storage.set(HISTORY_KEY, JSON.stringify(history), false); }catch(e){}
+}
+
+async function loadLifetimeStats(){
+  try{
+    const result = await window.storage.get(STATS_KEY, false);
+    if(result && result.value) lifetimeStats = JSON.parse(result.value);
+  }catch(e){ lifetimeStats = { quizCorrect:0, matchRounds:0 }; }
+}
+async function persistLifetimeStats(){
+  try{ await window.storage.set(STATS_KEY, JSON.stringify(lifetimeStats), false); }catch(e){}
+}
+
+function renderStreakRow(){
+  const t = UI[lang];
+  document.getElementById('streakRow').innerHTML = `
+    <div class="streak-card"><div class="streak-num">${streak.current || 0}</div><div class="streak-label">${t.streakCurrent} (${t.streakDays})</div></div>
+    <div class="streak-card"><div class="streak-num">${streak.longest || 0}</div><div class="streak-label">${t.streakBest} (${t.streakDays})</div></div>
+  `;
+}
+
+function renderChart(){
+  const t = UI[lang];
+  const last14 = history.slice(-14);
+  const max = 28;
+  document.getElementById('chartBox').innerHTML = `
+    <div class="chart-title">${t.chartTitle}</div>
+    <div class="chart-bars">
+      ${last14.map(h => {
+        const pct = Math.max(2, Math.round((h.count / max) * 100));
+        const d = new Date(h.date);
+        const label = `${d.getDate()}/${d.getMonth()+1}`;
+        return `<div class="chart-bar-wrap"><div class="chart-bar" style="height:${pct}%;"></div><div class="chart-day">${label}</div></div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function totalLettersDone(){
+  let n = 0;
+  Object.values(state).forEach(e => { if(e && e.done) n++; });
+  return n;
+}
+
+function renderBadges(){
+  const t = UI[lang];
+  const doneCount = totalLettersDone();
+  const BADGES = [
+    { emoji:'🌱', name:t.badge5, unlocked: doneCount >= 5 },
+    { emoji:'🌿', name:t.badge15, unlocked: doneCount >= 15 },
+    { emoji:'🌳', name:t.badge28, unlocked: doneCount >= 28 },
+    { emoji:'🔥', name:t.badgeStreak3, unlocked: (streak.longest || 0) >= 3 },
+    { emoji:'⚡', name:t.badgeStreak7, unlocked: (streak.longest || 0) >= 7 },
+    { emoji:'🏆', name:t.badgeStreak30, unlocked: (streak.longest || 0) >= 30 },
+    { emoji:'📝', name:t.badgeJournal1, unlocked: journal.length >= 1 },
+    { emoji:'📚', name:t.badgeJournal10, unlocked: journal.length >= 10 },
+    { emoji:'🎯', name:t.badgeQuiz10, unlocked: (lifetimeStats.quizCorrect || 0) >= 10 },
+    { emoji:'🧩', name:t.badgeMatch1, unlocked: (lifetimeStats.matchRounds || 0) >= 1 },
+  ];
+  document.getElementById('badgesGrid').innerHTML = BADGES.map(b => `
+    <div class="badge-item${b.unlocked ? ' unlocked' : ''}">
+      <div class="badge-emoji">${b.emoji}</div>
+      <div class="badge-name">${b.name}</div>
+    </div>
+  `).join('');
+}
+
+async function renderStatsPage(){
+  renderStreakRow();
+  renderChart();
+  renderBadges();
+}
+
+// ---- Journal ----
+const JOURNAL_KEY = 'mahrec-journal-v1';
+let journal = [];
+
+function renderJournal(){
+  const t = UI[lang];
+  const list = document.getElementById('journalList');
+  if(journal.length === 0){
+    list.innerHTML = `<div class="journal-empty">${t.journalEmpty}</div>`;
+    return;
+  }
+  list.innerHTML = journal.map(e => `
+    <div class="journal-item"><span class="jd">${e.date}</span><span class="jt">${e.text}</span></div>
+  `).join('');
+}
+
+async function persistJournal(){
+  try{ await window.storage.set(JOURNAL_KEY, JSON.stringify(journal), false); }
+  catch(e){ console.error('Journal save failed', e); }
+}
+async function loadJournal(){
+  try{
+    const result = await window.storage.get(JOURNAL_KEY, false);
+    if(result && result.value) journal = JSON.parse(result.value);
+  }catch(e){ journal = []; }
+  renderJournal();
+}
+
+document.getElementById('journalDate').valueAsDate = new Date();
+document.getElementById('journalAddBtn').addEventListener('click', ()=>{
+  const dateEl = document.getElementById('journalDate');
+  const inputEl = document.getElementById('journalInput');
+  if(!inputEl.value.trim()) return;
+  journal.unshift({date: dateEl.value, text: inputEl.value.trim()});
+  inputEl.value = '';
+  renderJournal();
+  persistJournal();
+});
+
+// ---- Export / Import ----
+async function collectQuranUserData(){
+  const data = {};
+  try{
+    const result = await window.storage.list('quran-', false);
+    const keys = (result && result.keys) || [];
+    for(const k of keys){
+      // On n'exporte que les données créées par l'utilisateur, pas le texte du Coran
+      // lui-même (favoris, notes, statuts, compteurs, dernière lecture, taille de police) —
+      // ça évite un fichier de sauvegarde énorme, et ce texte est re-téléchargeable.
+      if(k.startsWith('quran-simple-') || k.startsWith('quran-tr-') || k === 'quran-surah-list') continue;
+      const r = await window.storage.get(k, false).catch(()=>null);
+      if(r) data[k] = r.value;
+    }
+  }catch(e){}
+  return data;
+}
+
+document.getElementById('exportBtn').addEventListener('click', async ()=>{
+  const quran = await collectQuranUserData();
+  const data = { progression: state, journal: journal, quran: quran, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mahrec-donnees.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('importBtn').addEventListener('click', ()=>{
+  document.getElementById('importFileInput').click();
+});
+
+document.getElementById('importFileInput').addEventListener('change', (e)=>{
+  const t = UI[lang];
+  const statusEl = document.getElementById('importStatus');
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev)=>{
+    try{
+      const data = JSON.parse(ev.target.result);
+      if(data.progression){
+        state = data.progression;
+        await persist();
+      }
+      if(data.journal){
+        journal = data.journal;
+        await persistJournal();
+      }
+      if(data.quran){
+        for(const [k, v] of Object.entries(data.quran)){
+          await window.storage.set(k, v, false);
+        }
+      }
+      statusEl.textContent = t.importSuccess;
+      statusEl.style.display = 'block';
+      statusEl.style.color = 'var(--emerald)';
+      renderLetters();
+      renderJournal();
+      if(document.querySelector('.page[data-page="quran"]').classList.contains('active')){
+        surahList = null;
+        loadSurahList();
+      }
+    }catch(err){
+      statusEl.textContent = t.importError;
+      statusEl.style.display = 'block';
+      statusEl.style.color = 'var(--risk)';
+    }
+    setTimeout(()=>{ statusEl.style.display = 'none'; }, 4000);
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
+// ---- Dark mode ----
+document.getElementById('darkToggle').addEventListener('click', ()=>{
+  document.body.classList.toggle('dark');
+  document.getElementById('darkToggle').textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+});
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t2=>t2.classList.remove('active'));
+    document.querySelectorAll('.res-group').forEach(g=>g.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('res-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.lang-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    lang = btn.dataset.lang;
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    applyStaticText();
+    renderLetters();
+    renderRisks();
+    renderSifat();
+    renderRules();
+    matchCards = [];
+    tfCurrent = null;
+    renderQuizModes();
+    renderQuizMode();
+    renderJournal();
+    renderNav();
+    if(currentPage === 'tools') renderTools();
+    if(currentPage === 'stats') renderStatsPage();
+  });
+});
+
+applyStaticText();
+renderResources();
+renderRisks();
+renderSifat();
+renderRules();
+renderQuizModes();
+renderQuizMode();
+loadJournal();
+loadLifetimeStats();
+(async () => {
+  await loadHistory();
+  await loadState();
+  await recordTodaySnapshot();
+  await loadStreak();
+  renderStatsPage();
+})();
+renderNav();
+showPage('letters');
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
