@@ -574,9 +574,12 @@
     padding:7px 12px;font-size:12.5px;cursor:pointer;
   }
   .qfo-toolbar button.active{background:var(--emerald);color:#fff;border-color:var(--emerald);}
-  .qfo-content{flex:1;overflow-y:auto;padding:14px;}
+  .qfo-zoom-controls{display:flex;gap:6px;}
+  .qfo-content{flex:1;overflow-y:auto;padding:14px;--qfo-zoom:1;}
+  .qfo-content .mushaf-page-text{font-size:calc(1em * var(--qfo-zoom));}
+  .qfo-content .mushaf-ayah-num{font-size:calc(0.55em * var(--qfo-zoom));}
   .qfo-content.qfo-horizontal{
-    display:flex;overflow-y:hidden;overflow-x:hidden;align-items:stretch;padding:14px;
+    display:flex;overflow-y:hidden;overflow-x:hidden;align-items:stretch;padding:14px;touch-action:none;
   }
   .qfo-content.qfo-horizontal .mushaf-page{width:100%;flex-shrink:0;margin-bottom:0;overflow-y:auto;}
   .qfo-nav{
@@ -773,6 +776,10 @@
 <div class="quran-fullscreen-overlay" id="quranFullscreenOverlay">
   <div class="qfo-toolbar">
     <button id="qfoCloseBtn"></button>
+    <div class="qfo-zoom-controls">
+      <button id="qfoZoomOutBtn">−</button>
+      <button id="qfoZoomInBtn">+</button>
+    </div>
     <div>
       <button id="qfoVerticalBtn" class="active"></button>
       <button id="qfoHorizontalBtn"></button>
@@ -2593,6 +2600,9 @@ function closeMushafFullscreen(){
   const overlay = document.getElementById('quranFullscreenOverlay');
   overlay.classList.remove('open');
   try{
+    if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+  }catch(e){}
+  try{
     if(document.fullscreenElement) document.exitFullscreen().catch(()=>{});
   }catch(e){}
 }
@@ -2604,6 +2614,16 @@ function setFullscreenOrientation(orientation){
   document.getElementById('qfoHorizontalBtn').classList.toggle('active', orientation === 'horizontal');
   document.getElementById('qfoNav').style.display = orientation === 'horizontal' ? 'flex' : 'none';
   renderFullscreenContent();
+  // En mode horizontal, on tente de basculer le téléphone en paysage automatiquement
+  // (comme dans un jeu mobile). Certains navigateurs refusent — dans ce cas
+  // l'utilisateur peut simplement tourner son téléphone lui-même.
+  try{
+    if(orientation === 'horizontal' && screen.orientation && screen.orientation.lock){
+      screen.orientation.lock('landscape').catch(()=>{});
+    }else if(orientation === 'vertical' && screen.orientation && screen.orientation.unlock){
+      screen.orientation.unlock();
+    }
+  }catch(e){}
 }
 
 function renderFullscreenContent(){
@@ -2645,7 +2665,7 @@ document.getElementById('qfoNextBtn').addEventListener('click', ()=>{
   let touchStartX = null;
   const content = document.getElementById('qfoContent');
   content.addEventListener('touchstart', (e)=>{
-    if(quranFullscreenState.orientation !== 'horizontal') return;
+    if(quranFullscreenState.orientation !== 'horizontal' || e.touches.length !== 1) return;
     touchStartX = e.touches[0].clientX;
   });
   content.addEventListener('touchend', (e)=>{
@@ -2653,11 +2673,52 @@ document.getElementById('qfoNextBtn').addEventListener('click', ()=>{
     const dx = e.changedTouches[0].clientX - touchStartX;
     touchStartX = null;
     if(Math.abs(dx) < 50) return;
-    // RTL : glisser vers la droite = page précédente, vers la gauche = page suivante.
-    if(dx > 0) document.getElementById('qfoPrevBtn').click();
+    // Lecture RTL : glisser vers la gauche (comme tourner une page d'un livre arabe)
+    // = page précédente ; vers la droite = page suivante.
+    if(dx < 0) document.getElementById('qfoPrevBtn').click();
     else document.getElementById('qfoNextBtn').click();
   });
 })();
+
+// Pincer pour zoomer (pinch-to-zoom) + boutons zoom, en plein écran.
+const quranFullscreenZoom = { level: 1 };
+function applyFullscreenZoom(){
+  quranFullscreenZoom.level = Math.max(0.7, Math.min(2.2, quranFullscreenZoom.level));
+  document.getElementById('qfoContent').style.setProperty('--qfo-zoom', quranFullscreenZoom.level);
+}
+function zoomFullscreen(delta){
+  quranFullscreenZoom.level += delta;
+  applyFullscreenZoom();
+}
+(function(){
+  let pinchStartDist = null;
+  let pinchStartZoom = 1;
+  const content = document.getElementById('qfoContent');
+  function dist(touches){
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx*dx + dy*dy);
+  }
+  content.addEventListener('touchstart', (e)=>{
+    if(e.touches.length === 2){
+      pinchStartDist = dist(e.touches);
+      pinchStartZoom = quranFullscreenZoom.level;
+    }
+  });
+  content.addEventListener('touchmove', (e)=>{
+    if(e.touches.length === 2 && pinchStartDist){
+      e.preventDefault();
+      const newDist = dist(e.touches);
+      quranFullscreenZoom.level = pinchStartZoom * (newDist / pinchStartDist);
+      applyFullscreenZoom();
+    }
+  }, {passive:false});
+  content.addEventListener('touchend', (e)=>{
+    if(e.touches.length < 2) pinchStartDist = null;
+  });
+})();
+document.getElementById('qfoZoomInBtn').addEventListener('click', ()=> zoomFullscreen(0.15));
+document.getElementById('qfoZoomOutBtn').addEventListener('click', ()=> zoomFullscreen(-0.15));
 
 function renderAyahListHTML(s, transAyahs, t){
   if(quranViewMode === 'page'){
