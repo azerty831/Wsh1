@@ -4,7 +4,7 @@
   "description": "App de suivi des makharij, sifât, règles de tajwid, quiz et outils de pratique.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#FAF6EC",
+  "background_color": "#F6F9F7",
   "theme_color": "#1D4A35",
   "orientation": "portrait",
   "icons": [
