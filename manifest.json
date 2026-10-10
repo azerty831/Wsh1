@@ -1,6 +1,6 @@
 {
-  "name": "Mahreç — Points d'articulation",
-  "short_name": "Mahreç",
+  "name": "Kur'an-ı Kerim",
+  "short_name": "Kur'an-ı Kerim",
   "description": "App de suivi des makharij, sifât, règles de tajwid, quiz et outils de pratique.",
   "start_url": "./index.html",
   "display": "standalone",
